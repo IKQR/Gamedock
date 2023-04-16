@@ -1,0 +1,44 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33213.308
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{E94CD5CD-F1BF-4B0D-B3D6-F7A08E25E11D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameDock.Server", "GameDock\Server\GameDock.Server.csproj", "{E1F26B52-07CF-4B82-91D2-70F735987120}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameDock.Client", "GameDock\Client\GameDock.Client.csproj", "{65CC678F-D6B5-4BE1-9928-6111B3E45A36}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameDock.Shared", "GameDock\Shared\GameDock.Shared.csproj", "{9296211C-81AE-4BBE-BA0B-1A2F9012A807}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E1F26B52-07CF-4B82-91D2-70F735987120}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E1F26B52-07CF-4B82-91D2-70F735987120}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E1F26B52-07CF-4B82-91D2-70F735987120}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E1F26B52-07CF-4B82-91D2-70F735987120}.Release|Any CPU.Build.0 = Release|Any CPU
+		{65CC678F-D6B5-4BE1-9928-6111B3E45A36}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65CC678F-D6B5-4BE1-9928-6111B3E45A36}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65CC678F-D6B5-4BE1-9928-6111B3E45A36}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65CC678F-D6B5-4BE1-9928-6111B3E45A36}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9296211C-81AE-4BBE-BA0B-1A2F9012A807}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9296211C-81AE-4BBE-BA0B-1A2F9012A807}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9296211C-81AE-4BBE-BA0B-1A2F9012A807}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9296211C-81AE-4BBE-BA0B-1A2F9012A807}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{E1F26B52-07CF-4B82-91D2-70F735987120} = {E94CD5CD-F1BF-4B0D-B3D6-F7A08E25E11D}
+		{65CC678F-D6B5-4BE1-9928-6111B3E45A36} = {E94CD5CD-F1BF-4B0D-B3D6-F7A08E25E11D}
+		{9296211C-81AE-4BBE-BA0B-1A2F9012A807} = {E94CD5CD-F1BF-4B0D-B3D6-F7A08E25E11D}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3B9210AB-E87E-4F92-AC10-49DA42BE7634}
+	EndGlobalSection
+EndGlobal
