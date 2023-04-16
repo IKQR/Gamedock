@@ -1,6 +1,8 @@
 ﻿<InputFile OnChange="@HandleFileSelected" Accept=".tar" Multiple="false"/>
 
-<div class="result">
+<RunContainerButton ImageName="@_imageName"/>
+
+<div id="upload">
     @if (_uploadResult.HasValue)
     {
         <div class="@(_uploadResult.Value ? "text-success" : "text-danger")">
@@ -8,33 +10,15 @@
         </div>
     }
 </div>
-
-@code {
-
-    [Inject]
-    private HttpClient Client { get; set; }
-
-    private bool? _uploadResult;
-
-    private async Task HandleFileSelected(InputFileChangeEventArgs e)
-    {
-        var file = e.File;
-
-        var request = new HttpRequestMessage(HttpMethod.Post, "api/file");
-
-        using var content = new MultipartFormDataContent();
-        content.Add(new StreamContent(file.OpenReadStream()), "file", file.Name);
-        request.Content = content;
-
-        try
+@if (_messages.Any())
+{
+    <div class="border border-dark p-3 rounded">
+        <textarea class="form-control bg-light border-0" rows="5">
+        @foreach (var message in _messages)
         {
-            var response = await Client.SendAsync(request);
-            _uploadResult = response.IsSuccessStatusCode;
+            @message
+            @("\n")
         }
-        catch (Exception)
-        {
-            _uploadResult = false;
-            throw;
-        }
-    }
+    </textarea>
+    </div>
 }

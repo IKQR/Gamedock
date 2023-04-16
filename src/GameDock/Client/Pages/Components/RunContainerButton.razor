@@ -1,0 +1,31 @@
+﻿@inject HttpClient Client
+
+<button class="btn btn-@_status" @onclick="RunContainer">Run</button>
+
+@code {
+
+    [Parameter]
+    public string ImageName { get; set; }
+
+    private string _status = "primary";
+
+    private async Task RunContainer()
+    {
+        if (string.IsNullOrWhiteSpace(ImageName))
+        {
+            return;
+        }
+
+        try
+        {
+            await Client.PostAsJsonAsync("api/container", ImageName);
+            _status = "success";
+        }
+        catch (Exception)
+        {
+            _status = "danger";
+            throw;
+        }
+    }
+
+}
