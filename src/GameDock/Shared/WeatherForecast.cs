@@ -1,3 +1,5 @@
+using System;
+
 namespace GameDock.Shared
 {
     public class WeatherForecast
@@ -6,7 +8,7 @@ namespace GameDock.Shared
 
         public int TemperatureC { get; set; }
 
-        public string? Summary { get; set; }
+        public string Summary { get; set; }
 
         public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
     }
