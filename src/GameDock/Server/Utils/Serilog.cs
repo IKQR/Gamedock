@@ -7,7 +7,7 @@ using Serilog.Events;
 using Serilog.Formatting.Json;
 using Serilog.Sinks.SystemConsole.Themes;
 
-namespace GameDock.Shared.Utils;
+namespace GameDock.Server.Utils;
 
 public static class Serilog
 {

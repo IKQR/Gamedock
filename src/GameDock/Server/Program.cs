@@ -1,6 +1,6 @@
-using GameDock.Server.Hubs;
+using GameDock.Application;
+using GameDock.Infrastructure;
 using GameDock.Server.Utils;
-using GameDock.Shared.Utils;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -19,8 +19,8 @@ if (builder.Environment.IsDevelopment())
 }
 
 builder.Services
-    .AddDocker()
-    .AddMediator();
+    .RegisterApplication()
+    .RegisterInfrastructure(builder.Configuration);
 
 var app = builder.Build();
 
@@ -30,7 +30,6 @@ if (app.Environment.IsDevelopment())
 }
 else
 {
-    app.UseExceptionHandler("/Error");
     app.UseHsts();
 }
 
@@ -40,8 +39,6 @@ app.UseBlazorFrameworkFiles();
 app.UseStaticFiles();
 
 app.UseRouting();
-
-app.MapHub<ImageHub>("/imageHub");
 
 app.MapRazorPages();
 app.MapControllers();

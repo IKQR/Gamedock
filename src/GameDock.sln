@@ -11,6 +11,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameDock.Client", "GameDock
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameDock.Shared", "GameDock\Shared\GameDock.Shared.csproj", "{9296211C-81AE-4BBE-BA0B-1A2F9012A807}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameDock.Application", "GameDock.Application\GameDock.Application.csproj", "{76E8627C-38F7-46CD-928A-66D8FBFD29B4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameDock.Domain", "GameDock.Domain\GameDock.Domain.csproj", "{48F521BD-2D55-4E75-8246-E15E936687F4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameDock.Infrastructure", "GameDock.Infrastructure\GameDock.Infrastructure.csproj", "{8F63B3ED-DD4A-4F3F-9E15-CDDE648CF502}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,6 +35,18 @@ Global
 		{9296211C-81AE-4BBE-BA0B-1A2F9012A807}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9296211C-81AE-4BBE-BA0B-1A2F9012A807}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9296211C-81AE-4BBE-BA0B-1A2F9012A807}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76E8627C-38F7-46CD-928A-66D8FBFD29B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76E8627C-38F7-46CD-928A-66D8FBFD29B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76E8627C-38F7-46CD-928A-66D8FBFD29B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76E8627C-38F7-46CD-928A-66D8FBFD29B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{48F521BD-2D55-4E75-8246-E15E936687F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{48F521BD-2D55-4E75-8246-E15E936687F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{48F521BD-2D55-4E75-8246-E15E936687F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{48F521BD-2D55-4E75-8246-E15E936687F4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8F63B3ED-DD4A-4F3F-9E15-CDDE648CF502}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F63B3ED-DD4A-4F3F-9E15-CDDE648CF502}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F63B3ED-DD4A-4F3F-9E15-CDDE648CF502}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F63B3ED-DD4A-4F3F-9E15-CDDE648CF502}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

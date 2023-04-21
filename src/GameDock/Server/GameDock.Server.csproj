@@ -6,7 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MediatR" Version="12.0.1" />
     
     <PackageReference Include="Docker.DotNet" Version="3.125.14" />
     
@@ -20,9 +19,12 @@
     <PackageReference Include="Serilog.Enrichers.Environment" Version="2.2.0" />
     <PackageReference Include="Serilog.Enrichers.Span" Version="3.1.0" />
     <PackageReference Include="Destructurama.JsonNet" Version="2.0.0" />
+    <PackageReference Include="SharpCompress" Version="0.33.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\GameDock.Application\GameDock.Application.csproj" />
+    <ProjectReference Include="..\..\GameDock.Infrastructure\GameDock.Infrastructure.csproj" />
     <ProjectReference Include="..\Client\GameDock.Client.csproj" />
     <ProjectReference Include="..\Shared\GameDock.Shared.csproj" />
   </ItemGroup>
