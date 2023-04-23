@@ -30,21 +30,20 @@ var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-    app
-        .AddSwaggerEndpoint()
-        .UseWebAssemblyDebugging();
+    app.AddSwaggerEndpoint();
+    app.UseWebAssemblyDebugging();
 }
 else
 {
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
-
-app.UseBlazorFrameworkFiles();
-app.UseStaticFiles();
-
-app.UseRouting();
+app
+    .UseHttpsRedirection()
+    .ConfigureExceptionHandler()
+    .UseBlazorFrameworkFiles()
+    .UseStaticFiles()
+    .UseRouting();
 
 app.MapRazorPages();
 app.MapControllers();

@@ -7,22 +7,22 @@
 
     <ItemGroup>
 
-        <PackageReference Include="Docker.DotNet" Version="3.125.14"/>
+        <PackageReference Include="Docker.DotNet" Version="3.125.14" />
 
-        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="7.0.5"/>
-        <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="7.0.5"/>
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="7.0.5" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="7.0.5" />
 
-        <PackageReference Include="Serilog.Extensions.Logging" Version="3.1.0"/>
-        <PackageReference Include="Serilog.Settings.Configuration" Version="3.4.0"/>
-        <PackageReference Include="Serilog.Sinks.Console" Version="4.1.0"/>
-        <PackageReference Include="Serilog.Sinks.Async" Version="1.5.0"/>
-        <PackageReference Include="Serilog.Enrichers.Environment" Version="2.2.0"/>
-        <PackageReference Include="Serilog.Enrichers.Span" Version="3.1.0"/>
-        <PackageReference Include="Destructurama.JsonNet" Version="2.0.0"/>
+        <PackageReference Include="Serilog.Extensions.Logging" Version="3.1.0" />
+        <PackageReference Include="Serilog.Settings.Configuration" Version="3.4.0" />
+        <PackageReference Include="Serilog.Sinks.Console" Version="4.1.0" />
+        <PackageReference Include="Serilog.Sinks.Async" Version="1.5.0" />
+        <PackageReference Include="Serilog.Enrichers.Environment" Version="2.2.0" />
+        <PackageReference Include="Serilog.Enrichers.Span" Version="3.1.0" />
+        <PackageReference Include="Destructurama.JsonNet" Version="2.0.0" />
 
-        <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="6.5.0"/>
-        <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.5.0"/>
-        <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.5.0"/>
+        <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="6.5.0" />
+        <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.5.0" />
+        <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.5.0" />
 
 
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.5">
@@ -32,10 +32,10 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\GameDock.Server.Application\GameDock.Server.Application.csproj"/>
-        <ProjectReference Include="..\..\GameDock.Server.Infrastructure\GameDock.Server.Infrastructure.csproj"/>
-        <ProjectReference Include="..\Client\GameDock.Client.csproj"/>
-        <ProjectReference Include="..\Shared\GameDock.Shared.csproj"/>
+        <ProjectReference Include="..\..\GameDock.Server.Application\GameDock.Server.Application.csproj" />
+        <ProjectReference Include="..\..\GameDock.Server.Infrastructure\GameDock.Server.Infrastructure.csproj" />
+        <ProjectReference Include="..\Client\GameDock.Client.csproj" />
+        <ProjectReference Include="..\Shared\GameDock.Shared.csproj" />
     </ItemGroup>
 
 
