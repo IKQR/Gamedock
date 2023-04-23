@@ -5,10 +5,11 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
+// Host
 var builder = WebApplication.CreateBuilder(args);
 builder.Logging.UseSerilog();
 
-builder.Services.AddSignalR();
+// Services
 builder.Services.AddControllersWithViews();
 
 var mvcBuilder = builder.Services.AddRazorPages();
@@ -19,14 +20,18 @@ if (builder.Environment.IsDevelopment())
 }
 
 builder.Services
+    .ConfigureSwagger()
     .RegisterApplication()
     .RegisterInfrastructure(builder.Configuration);
 
+// Application
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-    app.UseWebAssemblyDebugging();
+    app
+        .AddSwaggerEndpoint()
+        .UseWebAssemblyDebugging();
 }
 else
 {

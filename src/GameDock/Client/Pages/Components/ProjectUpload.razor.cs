@@ -24,18 +24,18 @@ public partial class ProjectUpload : ComponentBase, IDisposable
 
     protected override async Task OnInitializedAsync()
     {
-        _hubConnection = new HubConnectionBuilder()
-            .WithUrl(NavigationManager.ToAbsoluteUri("/imagehub"))
-            .Build();
-
-        _hubConnection.On<string>("BuildProgress", (message) =>
-        {
-            InvokeAsync(() =>
-            {
-                _messages.Add(message);
-                StateHasChanged();
-            });
-        });
+        // _hubConnection = new HubConnectionBuilder()
+        //     .WithUrl(NavigationManager.ToAbsoluteUri("/imagehub"))
+        //     .Build();
+        //
+        // _hubConnection.On<string>("BuildProgress", (message) =>
+        // {
+        //     InvokeAsync(() =>
+        //     {
+        //         _messages.Add(message);
+        //         StateHasChanged();
+        //     });
+        // });
 
         await _hubConnection.StartAsync();
     }
