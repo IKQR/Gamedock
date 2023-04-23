@@ -2,4 +2,5 @@
 
 namespace GameDock.Domain.Build;
 
-public record BuildInfo(string Id, string Name, string Version, BuildStatus Status);
+public record BuildInfo(Guid Id, string Name, string Version, BuildStatus Status, DateTime CreatedAt,
+    DateTime UpdatedAt = default);

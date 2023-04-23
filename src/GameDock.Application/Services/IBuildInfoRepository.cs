@@ -4,9 +4,9 @@ namespace GameDock.Application.Services;
 
 public interface IBuildInfoRepository
 {
-    Task Add(BuildInfo info);
+    Task<BuildInfo> AddAsync(string name, string version, CancellationToken cancellationToken = default);
     
-    Task<BuildInfo> GetById(string id, CancellationToken cancellationToken = default);
+    Task<BuildInfo> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
     
-    Task<BuildInfo> GetByName(string name, string version, CancellationToken cancellationToken = default);
+    Task<BuildInfo> GetByNameAsync(string name, string version, CancellationToken cancellationToken = default);
 }

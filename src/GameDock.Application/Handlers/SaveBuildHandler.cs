@@ -1,4 +1,5 @@
-﻿using GameDock.Application.Helpers;
+﻿using System.Transactions;
+using GameDock.Application.Helpers;
 using GameDock.Application.Services;
 using GameDock.Domain.Build;
 using GameDock.Domain.Enums;
@@ -29,26 +30,16 @@ public class SaveBuildRequestHandler : IRequestHandler<SaveBuildRequest, BuildIn
             archive = await ArchiveHelper.ZipToTarAsync(archive, true);
         }
 
-        var key = await _files.Add(archive, cancellationToken);
+        using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+        {
+            var info = await _infos.AddAsync(request.BuildName, request.Version, cancellationToken);
 
-        try
-        {
-            var buildInfo = new BuildInfo(key, request.BuildName, request.Version, BuildStatus.Saved);
-            await _infos.Add(buildInfo);
+            await _files.Add(info.Id.ToString(), archive, cancellationToken);
 
-            return buildInfo;
-        }
-        catch (Exception)
-        {
-            await _files.TryRemove(key, CancellationToken.None);
-            throw;
-        }
-        finally
-        {
-            await archive.DisposeAsync();
+            return info;
         }
     }
 }
 
-public record SaveBuildRequest
-    (string BuildName, string Version, BuildArchiveType Type, Stream Archive) : IRequest<BuildInfo>;
+public record SaveBuildRequest(string BuildName, string Version, BuildArchiveType Type, Stream Archive)
+    : IRequest<BuildInfo>;
