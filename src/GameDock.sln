@@ -11,11 +11,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameDock.Client", "GameDock
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameDock.Shared", "GameDock\Shared\GameDock.Shared.csproj", "{9296211C-81AE-4BBE-BA0B-1A2F9012A807}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameDock.Application", "GameDock.Application\GameDock.Application.csproj", "{76E8627C-38F7-46CD-928A-66D8FBFD29B4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameDock.Server.Application", "GameDock.Server.Application\GameDock.Server.Application.csproj", "{76E8627C-38F7-46CD-928A-66D8FBFD29B4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameDock.Domain", "GameDock.Domain\GameDock.Domain.csproj", "{48F521BD-2D55-4E75-8246-E15E936687F4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameDock.Server.Domain", "GameDock.Server.Domain\GameDock.Server.Domain.csproj", "{48F521BD-2D55-4E75-8246-E15E936687F4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameDock.Infrastructure", "GameDock.Infrastructure\GameDock.Infrastructure.csproj", "{8F63B3ED-DD4A-4F3F-9E15-CDDE648CF502}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameDock.Server.Infrastructure", "GameDock.Server.Infrastructure\GameDock.Server.Infrastructure.csproj", "{8F63B3ED-DD4A-4F3F-9E15-CDDE648CF502}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -52,9 +52,9 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{E1F26B52-07CF-4B82-91D2-70F735987120} = {E94CD5CD-F1BF-4B0D-B3D6-F7A08E25E11D}
 		{65CC678F-D6B5-4BE1-9928-6111B3E45A36} = {E94CD5CD-F1BF-4B0D-B3D6-F7A08E25E11D}
 		{9296211C-81AE-4BBE-BA0B-1A2F9012A807} = {E94CD5CD-F1BF-4B0D-B3D6-F7A08E25E11D}
+		{E1F26B52-07CF-4B82-91D2-70F735987120} = {E94CD5CD-F1BF-4B0D-B3D6-F7A08E25E11D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3B9210AB-E87E-4F92-AC10-49DA42BE7634}

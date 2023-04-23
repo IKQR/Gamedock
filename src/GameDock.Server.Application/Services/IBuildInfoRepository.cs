@@ -1,4 +1,4 @@
-﻿using GameDock.Domain.Build;
+﻿using GameDock.Server.Domain.Build;
 
 namespace GameDock.Application.Services;
 

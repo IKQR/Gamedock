@@ -1,10 +1,10 @@
 ﻿using GameDock.Application.Services;
-using GameDock.Infrastructure.Database;
+using GameDock.Server.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace GameDock.Infrastructure;
+namespace GameDock.Server.Infrastructure;
 
 public static class ServiceRegister
 {

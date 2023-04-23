@@ -1,7 +1,7 @@
-﻿using GameDock.Infrastructure.Entities;
+﻿using GameDock.Server.Infrastructure.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace GameDock.Infrastructure.Database;
+namespace GameDock.Server.Infrastructure.Database;
 
 public class InfoDbContext : DbContext
 {

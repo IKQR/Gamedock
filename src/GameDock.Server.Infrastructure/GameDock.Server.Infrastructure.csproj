@@ -6,7 +6,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\GameDock.Application\GameDock.Application.csproj" />
+      <ProjectReference Include="..\GameDock.Server.Application\GameDock.Server.Application.csproj" />
     </ItemGroup>
 
     <ItemGroup>

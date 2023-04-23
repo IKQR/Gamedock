@@ -1,8 +1,8 @@
-﻿using GameDock.Infrastructure.Entities;
+﻿using GameDock.Server.Infrastructure.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace GameDock.Infrastructure.Database.Configurations;
+namespace GameDock.Server.Infrastructure.Database.Configurations;
 
 public class BuildInfoEntityConfiguration : IEntityTypeConfiguration<BuildInfoEntity>
 {

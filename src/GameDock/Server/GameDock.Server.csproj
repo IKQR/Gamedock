@@ -23,8 +23,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\GameDock.Application\GameDock.Application.csproj" />
-    <ProjectReference Include="..\..\GameDock.Infrastructure\GameDock.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\GameDock.Server.Application\GameDock.Server.Application.csproj" />
+    <ProjectReference Include="..\..\GameDock.Server.Infrastructure\GameDock.Server.Infrastructure.csproj" />
     <ProjectReference Include="..\Client\GameDock.Client.csproj" />
     <ProjectReference Include="..\Shared\GameDock.Shared.csproj" />
   </ItemGroup>

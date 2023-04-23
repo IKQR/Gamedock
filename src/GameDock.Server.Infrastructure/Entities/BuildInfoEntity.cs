@@ -1,6 +1,6 @@
-﻿using GameDock.Domain.Enums;
+﻿using GameDock.Server.Domain.Enums;
 
-namespace GameDock.Infrastructure.Entities;
+namespace GameDock.Server.Infrastructure.Entities;
 
 public class BuildInfoEntity
 {

@@ -1,6 +1,6 @@
-﻿using GameDock.Domain.Enums;
+﻿using GameDock.Server.Domain.Enums;
 
-namespace GameDock.Domain.Build;
+namespace GameDock.Server.Domain.Build;
 
 public record BuildInfo(Guid Id, string Name, string Version, BuildStatus Status, DateTime CreatedAt,
     DateTime UpdatedAt = default);

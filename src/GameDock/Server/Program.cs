@@ -1,5 +1,5 @@
 using GameDock.Application;
-using GameDock.Infrastructure;
+using GameDock.Server.Infrastructure;
 using GameDock.Server.Utils;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;

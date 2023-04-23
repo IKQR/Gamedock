@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using GameDock.Application.Handlers;
-using GameDock.Domain.Enums;
+using GameDock.Server.Domain.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

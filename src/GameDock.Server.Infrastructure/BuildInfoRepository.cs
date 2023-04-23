@@ -1,11 +1,11 @@
 ﻿using GameDock.Application.Services;
-using GameDock.Domain.Build;
-using GameDock.Infrastructure.Database;
-using GameDock.Infrastructure.Entities;
-using GameDock.Infrastructure.Mappers;
+using GameDock.Server.Domain.Build;
+using GameDock.Server.Infrastructure.Database;
+using GameDock.Server.Infrastructure.Entities;
+using GameDock.Server.Infrastructure.Mappers;
 using Microsoft.EntityFrameworkCore;
 
-namespace GameDock.Infrastructure;
+namespace GameDock.Server.Infrastructure;
 
 public class BuildInfoRepository : IBuildInfoRepository
 {

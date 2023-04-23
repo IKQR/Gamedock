@@ -1,7 +1,7 @@
-﻿using GameDock.Domain.Build;
-using GameDock.Infrastructure.Entities;
+﻿using GameDock.Server.Domain.Build;
+using GameDock.Server.Infrastructure.Entities;
 
-namespace GameDock.Infrastructure.Mappers;
+namespace GameDock.Server.Infrastructure.Mappers;
 
 public static class BuildInfoMapper
 {
