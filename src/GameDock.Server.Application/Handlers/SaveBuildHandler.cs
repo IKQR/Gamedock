@@ -13,30 +13,42 @@ public class SaveBuildRequestHandler : IRequestHandler<SaveBuildRequest, BuildIn
     private readonly ILogger _logger;
     private readonly IBuildInfoRepository _infos;
     private readonly IBuildFileRepository _files;
+    private readonly ITransactionManager _transaction;
 
     public SaveBuildRequestHandler(ILogger<SaveBuildRequestHandler> logger, IBuildInfoRepository infos,
-        IBuildFileRepository files)
+        IBuildFileRepository files, ITransactionManager transaction)
     {
         _logger = logger;
         _infos = infos;
         _files = files;
+        _transaction = transaction;
     }
 
     public async Task<BuildInfo> Handle(SaveBuildRequest request, CancellationToken cancellationToken)
     {
         var archive = request.Archive;
-        if (request.Type is BuildArchiveType.Zip)
+        try
         {
-            archive = await ArchiveHelper.ZipToTarAsync(archive, true);
+            if (request.Type is BuildArchiveType.Zip)
+            {
+                archive = await ArchiveHelper.ZipToTarAsync(archive, true);
+            }
+
+            var result = await _transaction.InTransactionAsync(async token =>
+                {
+                    var info = await _infos.AddAsync(request.BuildName, request.Version, token);
+
+                    await _files.SaveAsync(info.Id.ToString(), archive, token);
+
+                    return info;
+                },
+                cancellationToken);
+
+            return result;
         }
-
-        using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+        finally
         {
-            var info = await _infos.AddAsync(request.BuildName, request.Version, cancellationToken);
-
-            await _files.SaveAsync(info.Id.ToString(), archive, cancellationToken);
-
-            return info;
+            await archive.DisposeAsync();
         }
     }
 }

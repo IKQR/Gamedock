@@ -20,6 +20,7 @@ if (builder.Environment.IsDevelopment())
 }
 
 builder.Services
+    .ConfigureJson()
     .ConfigureSwagger()
     .RegisterApplication()
     .RegisterInfrastructure(builder.Configuration);

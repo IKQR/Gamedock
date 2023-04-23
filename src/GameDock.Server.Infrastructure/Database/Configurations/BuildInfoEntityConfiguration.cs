@@ -1,4 +1,5 @@
-﻿using GameDock.Server.Infrastructure.Entities;
+﻿using GameDock.Server.Domain.Enums;
+using GameDock.Server.Infrastructure.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -18,14 +19,19 @@ public class BuildInfoEntityConfiguration : IEntityTypeConfiguration<BuildInfoEn
         builder.Property(x => x.Version).IsRequired();
         
         builder.Property(x => x.UpdatedAt)
-            .ValueGeneratedOnAddOrUpdate();
+            .ValueGeneratedOnAddOrUpdate()
+            .HasDefaultValueSql("CURRENT_TIMESTAMP");
         
         builder.Property(x => x.CreatedAt)
             .ValueGeneratedOnAdd()
             .HasDefaultValueSql("CURRENT_TIMESTAMP");
         
         builder.Property(x => x.Status)
-            .HasColumnType("nvarchar(MAX)")
-            .IsRequired();
+            .IsRequired()
+            .HasConversion(
+                v => v.ToString(),
+                v => (BuildStatus)Enum.Parse(typeof(BuildStatus), v)
+            );
+
     }
 }

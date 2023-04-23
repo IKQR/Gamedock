@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using GameDock.Server.Application.Handlers;
 using GameDock.Server.Domain.Enums;
@@ -20,12 +21,18 @@ public class BuildController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> AddBuild(string buildName, string version, BuildArchiveType type, IFormFile archive,
-        CancellationToken cancellationToken)
+    public async Task<IActionResult> AddBuild(string buildName, string version, IFormFile archive, CancellationToken cancellationToken)
     {
+        var fileType = System.IO.Path.GetExtension(archive.FileName) switch
+        {
+            ".tar" => BuildArchiveType.Tar,
+            ".zip" => BuildArchiveType.Zip,
+            _ => throw new ArgumentOutOfRangeException("fileType"),
+        };
+        
         await using var fileStream = archive.OpenReadStream();
-        await _mediator.Send(new SaveBuildRequest(buildName, version, type, fileStream), cancellationToken);
+        var info = await _mediator.Send(new SaveBuildRequest(buildName, version, fileType, fileStream), cancellationToken);
 
-        return Ok();
+        return Ok(info);
     }
 }

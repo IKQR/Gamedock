@@ -11,7 +11,7 @@ public static class ArchiveHelper
     {
         ArgumentNullException.ThrowIfNull(sourceStream);
 
-        using var resultStream = new MemoryStream();
+        var resultStream = new MemoryStream();
         using var tarWriter = WriterFactory.Open(resultStream, ArchiveType.Tar,
             new TarWriterOptions(CompressionType.None, true));
         

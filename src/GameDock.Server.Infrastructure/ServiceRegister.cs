@@ -14,6 +14,8 @@ public static class ServiceRegister
         => services
             .AddDbContext<InfoDbContext>(opt => opt.UseSqlite(configuration.GetConnectionString("SQLite")))
             
+            .AddScoped<ITransactionManager, TransactionManager>()
+            
             .AddScoped<IBuildInfoRepository, BuildInfoRepository>()
             
             .AddScoped<IBuildFileRepository, BuildFileRepository>()
