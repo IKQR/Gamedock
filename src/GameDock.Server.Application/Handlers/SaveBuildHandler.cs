@@ -34,7 +34,7 @@ public class SaveBuildRequestHandler : IRequestHandler<SaveBuildRequest, BuildIn
         {
             var info = await _infos.AddAsync(request.BuildName, request.Version, cancellationToken);
 
-            await _files.Add(info.Id.ToString(), archive, cancellationToken);
+            await _files.SaveAsync(info.Id.ToString(), archive, cancellationToken);
 
             return info;
         }

@@ -5,7 +5,7 @@ using GameDock.Server.Infrastructure.Entities;
 using GameDock.Server.Infrastructure.Mappers;
 using Microsoft.EntityFrameworkCore;
 
-namespace GameDock.Server.Infrastructure;
+namespace GameDock.Server.Infrastructure.Repositories;
 
 public class BuildInfoRepository : IBuildInfoRepository
 {
