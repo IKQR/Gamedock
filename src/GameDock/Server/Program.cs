@@ -1,4 +1,4 @@
-using GameDock.Application;
+using GameDock.Server.Application;
 using GameDock.Server.Infrastructure;
 using GameDock.Server.Utils;
 using Microsoft.AspNetCore.Builder;

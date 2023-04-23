@@ -1,6 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using GameDock.Application.Handlers;
+using GameDock.Server.Application.Handlers;
 using GameDock.Server.Domain.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Http;

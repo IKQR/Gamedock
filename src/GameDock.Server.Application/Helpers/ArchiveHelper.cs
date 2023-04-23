@@ -3,7 +3,7 @@ using SharpCompress.Common;
 using SharpCompress.Writers;
 using SharpCompress.Writers.Tar;
 
-namespace GameDock.Application.Helpers;
+namespace GameDock.Server.Application.Helpers;
 
 public static class ArchiveHelper
 {

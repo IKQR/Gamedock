@@ -1,6 +1,6 @@
 ﻿using GameDock.Server.Domain.Build;
 
-namespace GameDock.Application.Services;
+namespace GameDock.Server.Application.Services;
 
 public interface IBuildInfoRepository
 {

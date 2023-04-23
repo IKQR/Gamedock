@@ -1,12 +1,12 @@
 ﻿using System.Transactions;
-using GameDock.Application.Helpers;
-using GameDock.Application.Services;
+using GameDock.Server.Application.Helpers;
+using GameDock.Server.Application.Services;
 using GameDock.Server.Domain.Build;
 using GameDock.Server.Domain.Enums;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace GameDock.Application.Handlers;
+namespace GameDock.Server.Application.Handlers;
 
 public class SaveBuildRequestHandler : IRequestHandler<SaveBuildRequest, BuildInfo>
 {

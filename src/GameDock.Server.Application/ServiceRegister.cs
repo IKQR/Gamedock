@@ -2,7 +2,7 @@
 using Docker.DotNet;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace GameDock.Application;
+namespace GameDock.Server.Application;
 
 public static class ServiceRegister
 {

@@ -1,4 +1,4 @@
-﻿using GameDock.Application.Services;
+﻿using GameDock.Server.Application.Services;
 using GameDock.Server.Domain.Build;
 using GameDock.Server.Infrastructure.Database;
 using GameDock.Server.Infrastructure.Entities;

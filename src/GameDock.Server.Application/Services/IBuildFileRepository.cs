@@ -1,4 +1,4 @@
-﻿namespace GameDock.Application.Services;
+﻿namespace GameDock.Server.Application.Services;
 
 public interface IBuildFileRepository
 {

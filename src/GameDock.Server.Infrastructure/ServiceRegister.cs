@@ -1,4 +1,4 @@
-﻿using GameDock.Application.Services;
+﻿using GameDock.Server.Application.Services;
 using GameDock.Server.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
