@@ -3,4 +3,6 @@
 public enum BuildStatus
 {
     Saved,
+    Failed,
+    Ready,
 }

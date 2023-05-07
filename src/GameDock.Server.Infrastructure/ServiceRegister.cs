@@ -1,5 +1,7 @@
-﻿using GameDock.Server.Application.Services;
+﻿using Docker.DotNet;
+using GameDock.Server.Application.Services;
 using GameDock.Server.Infrastructure.Database;
+using GameDock.Server.Infrastructure.Docker;
 using GameDock.Server.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -13,11 +15,10 @@ public static class ServiceRegister
         IConfiguration configuration)
         => services
             .AddDbContext<InfoDbContext>(opt => opt.UseSqlite(configuration.GetConnectionString("SQLite")))
-            
             .AddScoped<ITransactionManager, TransactionManager>()
-            
             .AddScoped<IBuildInfoRepository, BuildInfoRepository>()
-            
             .AddScoped<IBuildFileRepository, BuildFileRepository>()
-            .Configure<FileStorageOptions>(opt => opt.Path = configuration.GetConnectionString("FileStorage"));
+            .Configure<FileStorageOptions>(opt => opt.Path = configuration.GetConnectionString("FileStorage"))
+            .AddScoped<IImageBuilder, DockerImageBuilder>()
+            .AddSingleton<IDockerClient>(_ => new DockerClientConfiguration().CreateClient());
 }

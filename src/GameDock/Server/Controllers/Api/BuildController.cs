@@ -7,7 +7,7 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace GameDock.Server.Controllers;
+namespace GameDock.Server.Controllers.Api;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -21,7 +21,8 @@ public class BuildController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> AddBuild(string buildName, string version, IFormFile archive, CancellationToken cancellationToken)
+    public async Task<IActionResult> Upload(string buildName, string version, IFormFile archive,
+        CancellationToken cancellationToken)
     {
         var fileType = System.IO.Path.GetExtension(archive.FileName) switch
         {
@@ -29,9 +30,11 @@ public class BuildController : ControllerBase
             ".zip" => BuildArchiveType.Zip,
             _ => throw new ArgumentOutOfRangeException("fileType"),
         };
-        
+
         await using var fileStream = archive.OpenReadStream();
         var info = await _mediator.Send(new SaveBuildRequest(buildName, version, fileType, fileStream), cancellationToken);
+
+        await _mediator.Send(new StartImageBuildRequest(info.Id, "DotnetGameServer", ""), cancellationToken);
 
         return Ok(info);
     }

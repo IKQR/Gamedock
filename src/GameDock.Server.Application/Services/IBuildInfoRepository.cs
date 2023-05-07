@@ -1,4 +1,5 @@
 ﻿using GameDock.Server.Domain.Build;
+using GameDock.Server.Domain.Enums;
 
 namespace GameDock.Server.Application.Services;
 
@@ -9,4 +10,6 @@ public interface IBuildInfoRepository
     Task<BuildInfo> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
     
     Task<BuildInfo> GetByNameAsync(string name, string version, CancellationToken cancellationToken = default);
+
+    Task ChangeStatus(Guid id, BuildStatus status, CancellationToken cancellationToken = default);
 }

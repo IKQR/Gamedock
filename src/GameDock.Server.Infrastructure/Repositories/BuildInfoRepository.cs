@@ -1,5 +1,6 @@
 ﻿using GameDock.Server.Application.Services;
 using GameDock.Server.Domain.Build;
+using GameDock.Server.Domain.Enums;
 using GameDock.Server.Infrastructure.Database;
 using GameDock.Server.Infrastructure.Entities;
 using GameDock.Server.Infrastructure.Mappers;
@@ -38,12 +39,26 @@ public class BuildInfoRepository : IBuildInfoRepository
         return BuildInfoMapper.Map(entity);
     }
 
-    public async Task<BuildInfo> GetByNameAsync(string name, string version, CancellationToken cancellationToken = default)
+    public async Task<BuildInfo> GetByNameAsync(string name, string version, CancellationToken cancellationToken)
     {
         var entity =
             await _context.BuildInfos.FirstOrDefaultAsync(x => x.Name == name && x.Version == version,
                 cancellationToken);
 
         return BuildInfoMapper.Map(entity);
+    }
+
+    public async Task ChangeStatus(Guid id, BuildStatus status, CancellationToken cancellationToken)
+    {
+        var entity = await _context.BuildInfos.FindAsync(new object[] { id }, cancellationToken);
+
+        if (entity is null)
+        {
+            return;
+        }
+
+        entity.Status = status;
+
+        await _context.SaveChangesAsync(cancellationToken);
     }
 }
