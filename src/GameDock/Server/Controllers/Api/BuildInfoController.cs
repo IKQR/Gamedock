@@ -20,7 +20,7 @@ public class BuildInfoController : ControllerBase
     [ProducesResponseType(typeof(BuildInfo[]), 200)]
     public async Task<IActionResult> GetAll(
         [FromServices] IMediator mediator,
-        [FromServices] CancellationToken cancellationToken)
+        CancellationToken cancellationToken)
     {
         var info = await mediator.Send(new GetBuildsRequest(), cancellationToken);
 
@@ -35,7 +35,7 @@ public class BuildInfoController : ControllerBase
     public async Task<IActionResult> GetAll(
         [FromRoute] string id,
         [FromServices] IMediator mediator,
-        [FromServices] CancellationToken cancellationToken)
+        CancellationToken cancellationToken)
     {
         if (!Guid.TryParse(id, out var guidId))
         {

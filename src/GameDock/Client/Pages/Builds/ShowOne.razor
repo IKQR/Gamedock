@@ -9,7 +9,7 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="/builds">Builds</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Build @Id</li>
+        <li class="breadcrumb-item active" aria-current="page">@Id</li>
     </ol>
 </nav>
 
@@ -37,7 +37,7 @@ else
 @code {
 
     [Parameter]
-    public Guid Id { get; set; }
+    public string Id { get; set; }
 
     private BuildInfoDto _buildInfo;
     private bool _isLoading = true;

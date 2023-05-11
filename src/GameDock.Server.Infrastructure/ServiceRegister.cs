@@ -3,6 +3,8 @@ using GameDock.Server.Application.Services;
 using GameDock.Server.Infrastructure.Database;
 using GameDock.Server.Infrastructure.Docker;
 using GameDock.Server.Infrastructure.Repositories;
+using Hangfire;
+using Hangfire.SQLite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,5 +22,11 @@ public static class ServiceRegister
             .AddScoped<IBuildFileRepository, BuildFileRepository>()
             .Configure<FileStorageOptions>(opt => opt.Path = configuration.GetConnectionString("FileStorage"))
             .AddScoped<IImageBuilder, DockerImageBuilder>()
-            .AddSingleton<IDockerClient>(_ => new DockerClientConfiguration().CreateClient());
+            .AddSingleton<IDockerClient>(_ => new DockerClientConfiguration().CreateClient())
+            .AddHangfire(cfg => cfg
+                .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+                .UseSimpleAssemblyNameTypeSerializer()
+                .UseRecommendedSerializerSettings()
+                .UseSQLiteStorage(configuration.GetConnectionString("SQLite")))
+            .AddHangfireServer();
 }

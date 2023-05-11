@@ -7,8 +7,10 @@ using GameDock.Shared.Requests;
 using GameDock.Shared.Responses;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.JSInterop;
 
 namespace GameDock.Client.Components;
+
 public partial class ArchiveUpload : ComponentBase
 {
     [Inject]
@@ -17,12 +19,15 @@ public partial class ArchiveUpload : ComponentBase
     [Inject]
     public NavigationManager NavigationManager { get; set; }
 
+    [Inject]
+    public IJSRuntime JS { get; set; }
+
     [Parameter]
     public string NavigateOnSuccess { get; set; }
 
     private readonly UploadRequest _uploadRequest = new();
     private IBrowserFile _selectedFile;
-    
+
     private int _progressPercentage = 0;
 
     private void HandleFileSelected(InputFileChangeEventArgs e)
@@ -45,13 +50,13 @@ public partial class ArchiveUpload : ComponentBase
             int bytesRead;
             var chunkNumber = 0;
             var totalChunks = (int)Math.Ceiling((double)fileSize / bufferSize);
-            
+
             while ((bytesRead = await stream.ReadAsync(buffer)) != 0)
             {
                 totalBytesRead += bytesRead;
                 _progressPercentage = (int)(100 * totalBytesRead / fileSize);
                 await InvokeAsync(StateHasChanged);
-                
+
                 var chunkContent = new ByteArrayContent(buffer, 0, bytesRead);
                 chunkNumber++;
 
@@ -72,12 +77,14 @@ public partial class ArchiveUpload : ComponentBase
                 if (!response.IsSuccessStatusCode) break;
                 if (chunkNumber != totalChunks) continue;
 
-                var content = await response.Content.ReadAsStringAsync();
-                
-                var resultStream = await response.Content.ReadAsStreamAsync();
-                var uploadResponse = await JsonSerializer.DeserializeAsync<UploadResponse>(resultStream);
-                var navigationPath = string.Format(NavigateOnSuccess, new { buildId = uploadResponse.Id });
-                NavigationManager.NavigateTo(navigationPath);
+                var content = await response.Content.ReadAsStreamAsync();
+                var uploadResponse = await JsonSerializer.DeserializeAsync<UploadResponse>(content,
+                    new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true,
+                    });
+
+                NavigationManager.NavigateTo($"/builds/{uploadResponse.Id}");
             }
         }
         finally

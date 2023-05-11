@@ -61,7 +61,7 @@ public class DockerImageBuilder : IImageBuilder
                 null,
                 null,
                 buildProgress,
-                CancellationToken.None);
+                token);
 
             await _info.ChangeStatus(id, BuildStatus.Ready, cancellationToken: token);
         }
