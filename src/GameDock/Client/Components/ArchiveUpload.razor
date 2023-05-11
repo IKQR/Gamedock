@@ -1,0 +1,41 @@
+﻿<div class="container">
+    <EditForm Model="_uploadRequest" OnValidSubmit="HandleValidSubmit">
+        <DataAnnotationsValidator/>
+        <ValidationSummary/>
+
+        <div class="row">
+            <div class="form-group mb-md-2 col-sm-6">
+                <label>Build Name:</label>
+                <InputText class="form-control" @bind-Value="_uploadRequest.BuildName" required/>
+            </div>
+
+            <div class="form-group mb-md-2 col-sm-6">
+                <label>Version:</label>
+                <InputText class="form-control" @bind-Value="_uploadRequest.Version" required/>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group mb-md-2 col-sm-6">
+                <label>Runtime Path:</label>
+                <InputText class="form-control" @bind-Value="_uploadRequest.RuntimePah" required/>
+            </div>
+
+            <div class="form-group mb-md-2 col-sm-6">
+                <label>Launch Parameters:</label>
+                <InputText class="form-control" @bind-Value="_uploadRequest.LaunchParameters"/>
+            </div>
+        </div>
+
+        <div class="form-group mb-md-2">
+            <label>Upload File:</label>
+            <InputFile class="form-control" OnChange="HandleFileSelected"/>
+        </div>
+
+        <button type="submit" class="btn btn-primary mt-2">Upload</button>
+
+        <div class="progress mt-3">
+            <div class="progress-bar" role="progressbar" style="width: @_progressPercentage%;" aria-valuenow="@_progressPercentage" aria-valuemin="0" aria-valuemax="100">@_progressPercentage%</div>
+        </div>
+    </EditForm>
+</div>

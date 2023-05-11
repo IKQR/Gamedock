@@ -62,11 +62,12 @@ public class DockerImageBuilder : IImageBuilder
                 null,
                 buildProgress,
                 CancellationToken.None);
-            
+
             await _info.ChangeStatus(id, BuildStatus.Ready, cancellationToken: token);
         }
-        catch(Exception)
+        catch (Exception ex)
         {
+            _logger.LogError(ex, "Error occured while building new server {Id}", id);
             await _info.ChangeStatus(id, BuildStatus.Failed, CancellationToken.None);
             throw;
         }

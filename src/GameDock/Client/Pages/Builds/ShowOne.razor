@@ -1,0 +1,51 @@
+﻿@page "/builds/{id}"
+@using GameDock.Shared.Dto
+
+@inject HttpClient HttpClient
+@inject NavigationManager NavigationManager
+
+<h3>Build Info</h3>
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/builds">Builds</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Build @Id</li>
+    </ol>
+</nav>
+
+@if (_buildInfo != null)
+{
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Name: @_buildInfo.Name</h5>
+            <p class="card-text">Version: @_buildInfo.Version</p>
+            <p class="card-text">Status: @_buildInfo.Status</p>
+            <p class="card-text">Created At: @_buildInfo.CreatedAt.ToString()</p>
+            <p class="card-text">Updated At: @_buildInfo.UpdatedAt.ToString()</p>
+        </div>
+    </div>
+}
+else if (_isLoading)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <p>Build Info not found.</p>
+}
+
+@code {
+
+    [Parameter]
+    public Guid Id { get; set; }
+
+    private BuildInfoDto _buildInfo;
+    private bool _isLoading = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _buildInfo = await HttpClient.GetFromJsonAsync<BuildInfoDto>($"/api/build/info/{Id}");
+        _isLoading = false;
+    }
+
+}
