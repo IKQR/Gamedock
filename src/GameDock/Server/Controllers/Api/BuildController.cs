@@ -2,7 +2,9 @@
 using System.Threading;
 using System.Threading.Tasks;
 using GameDock.Server.Application.Handlers;
+using GameDock.Server.Domain.Build;
 using GameDock.Server.Domain.Enums;
+using GameDock.Shared.Requests;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -10,19 +12,16 @@ using Microsoft.AspNetCore.Mvc;
 namespace GameDock.Server.Controllers.Api;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/build")]
 public class BuildController : ControllerBase
 {
-    private readonly IMediator _mediator;
-
-    public BuildController(IMediator mediator)
-    {
-        _mediator = mediator;
-    }
-
     [HttpPost]
-    public async Task<IActionResult> Upload(string buildName, string version, IFormFile archive,
-        CancellationToken cancellationToken)
+    [ProducesResponseType(typeof(BuildInfo), 200)]
+    public async Task<IActionResult> Upload(
+        [FromForm] IFormFile archive,
+        [FromForm] UploadRequest details,
+        [FromServices] IMediator mediator,
+        [FromServices] CancellationToken cancellationToken)
     {
         var fileType = System.IO.Path.GetExtension(archive.FileName) switch
         {
@@ -32,9 +31,10 @@ public class BuildController : ControllerBase
         };
 
         await using var fileStream = archive.OpenReadStream();
-        var info = await _mediator.Send(new SaveBuildRequest(buildName, version, fileType, fileStream), cancellationToken);
+        var info = await mediator.Send(new SaveBuildRequest(details.BuildName, details.Version, fileType, fileStream),
+            cancellationToken);
 
-        await _mediator.Send(new StartImageBuildRequest(info.Id, "DotnetGameServer", ""), cancellationToken);
+        await mediator.Send(new StartImageBuildRequest(info.Id, "DotnetGameServer", ""), cancellationToken);
 
         return Ok(info);
     }

@@ -5,4 +5,5 @@ public enum BuildStatus
     Saved,
     Failed,
     Ready,
+    Building,
 }

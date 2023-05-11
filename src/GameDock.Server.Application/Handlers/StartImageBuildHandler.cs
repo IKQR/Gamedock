@@ -20,9 +20,10 @@ public class StartImageBuildHandler : IRequestHandler<StartImageBuildRequest>
         _logger.LogInformation("Preparing for game server '{Id}' image build", request.BuildId);
 
         Task.Run(() =>
-                _imageBuilder.BuildImageFromArchive(request.BuildId, request.RuntimePath, request.LaunchParameters),
+                _imageBuilder.BuildImageFromArchive(request.BuildId, request.RuntimePath, request.LaunchParameters,
+                    CancellationToken.None),
             CancellationToken.None);
-        
+
         _logger.LogInformation("Build '{Id}' scheduled", request.BuildId);
 
         return Task.CompletedTask;

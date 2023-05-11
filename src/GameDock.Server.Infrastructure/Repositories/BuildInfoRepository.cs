@@ -32,11 +32,14 @@ public class BuildInfoRepository : IBuildInfoRepository
         return BuildInfoMapper.Map(entry.Entity);
     }
 
-    public async Task<BuildInfo> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+    public async Task<IList<BuildInfo>> GetByIdAsync(IEnumerable<Guid> ids,
+        CancellationToken cancellationToken = default)
     {
-        var entity = await _context.BuildInfos.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+        var entities = await _context.BuildInfos
+            .Where(x => ids.Contains(x.Id))
+            .ToListAsync(cancellationToken: cancellationToken);
 
-        return BuildInfoMapper.Map(entity);
+        return entities.Select(BuildInfoMapper.Map).ToList();
     }
 
     public async Task<BuildInfo> GetByNameAsync(string name, string version, CancellationToken cancellationToken)

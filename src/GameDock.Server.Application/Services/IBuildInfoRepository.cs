@@ -7,7 +7,7 @@ public interface IBuildInfoRepository
 {
     Task<BuildInfo> AddAsync(string name, string version, CancellationToken cancellationToken = default);
     
-    Task<BuildInfo> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
+    Task<IList<BuildInfo>> GetByIdAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken = default);
     
     Task<BuildInfo> GetByNameAsync(string name, string version, CancellationToken cancellationToken = default);
 

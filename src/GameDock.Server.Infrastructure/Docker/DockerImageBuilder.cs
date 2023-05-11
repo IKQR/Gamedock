@@ -32,6 +32,7 @@ public class DockerImageBuilder : IImageBuilder
     public async Task BuildImageFromArchive(Guid id, string runtimePath, string launchParameters,
         CancellationToken token)
     {
+        await _info.ChangeStatus(id, BuildStatus.Building, cancellationToken: token);
         try
         {
             await _docker.System.PingAsync(token);
@@ -66,7 +67,7 @@ public class DockerImageBuilder : IImageBuilder
         }
         catch(Exception)
         {
-            await _info.ChangeStatus(id, BuildStatus.Failed, cancellationToken: token);
+            await _info.ChangeStatus(id, BuildStatus.Failed, CancellationToken.None);
             throw;
         }
     }
