@@ -8,9 +8,9 @@ WORKDIR /src
 COPY ["GameDock/Server/GameDock.Server.csproj", "GameDock/Server/"]
 COPY ["GameDock/Client/GameDock.Client.csproj", "GameDock/Client/"]
 COPY ["GameDock/Shared/GameDock.Shared.csproj", "GameDock/Shared/"]
-COPY ["GameDock.Server.Application/GameDock.Server.Domain.csproj", "GameDock.Server.Domain/"]
+COPY ["GameDock.Server.Domain/GameDock.Server.Domain.csproj", "GameDock.Server.Domain/"]
 COPY ["GameDock.Server.Application/GameDock.Server.Application.csproj", "GameDock.Server.Application/"]
-COPY ["GameDock.Server.Application/GameDock.Server.Infrastructure.csproj", "GameDock.Server.Infrastructure/"]
+COPY ["GameDock.Server.Infrastructure/GameDock.Server.Infrastructure.csproj", "GameDock.Server.Infrastructure/"]
 RUN dotnet restore "GameDock/Server/GameDock.Server.csproj"
 COPY . .
 WORKDIR "/src/GameDock/Server"
