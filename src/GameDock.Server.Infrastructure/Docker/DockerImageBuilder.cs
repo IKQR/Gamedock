@@ -32,10 +32,9 @@ public class DockerImageBuilder : IImageBuilder
     public async Task BuildImageFromArchive(Guid id, string runtimePath, string launchParameters,
         CancellationToken token)
     {
-        await _info.ChangeStatus(id, BuildStatus.Building, cancellationToken: token);
         try
         {
-            await _docker.System.PingAsync(token);
+            await _info.ChangeStatus(id, BuildStatus.Building, cancellationToken: token);
 
             var dockerSystem = await _docker.System.GetSystemInfoAsync(token);
 
@@ -50,11 +49,11 @@ public class DockerImageBuilder : IImageBuilder
             var buildParameters = new ImageBuildParameters
             {
                 Dockerfile = Dockerfile,
-                Tags = new List<string> { $"game-server-{(isWindows ? "win" : "unix")}:latest" },
+                Tags = new List<string> { $"game-server-{id}:latest" },
             };
 
             var buildProgress = new Progress<JSONMessage>((x) => HandleBuildProgress(id, x));
-
+            
             await _docker.Images.BuildImageFromDockerfileAsync(
                 buildParameters,
                 buildArchive,
@@ -121,7 +120,7 @@ public class DockerImageBuilder : IImageBuilder
 public static class Dockerfiles
 {
     public static string GetLinuxDockerfile(string runtimePath, string launchParameters) => $@"
-            FROM ubuntu:20.04
+            FROM mcr.microsoft.com/dotnet/runtime:7.0
             EXPOSE 5000
             WORKDIR /app
             COPY . .

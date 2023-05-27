@@ -4,7 +4,7 @@ using GameDock.Shared.Responses;
 
 namespace GameDock.Server.Mappers;
 
-public static class BuildInfoDtoMapper
+public static class BuildInfoMapper
 {
     public static BuildInfoDto Map(BuildInfo buildInfo) => new()
     {

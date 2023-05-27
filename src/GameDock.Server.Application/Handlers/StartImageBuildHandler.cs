@@ -23,13 +23,12 @@ public class StartImageBuildHandler : IRequestHandler<StartImageBuildRequest>
     {
         _logger.LogInformation("Preparing for game server '{Id}' image build", request.BuildId);
 
-        _jobClient.Schedule(
+        _jobClient.Enqueue(
             () => _imageBuilder.BuildImageFromArchive(
                 request.BuildId,
                 request.RuntimePath,
                 request.LaunchParameters,
-                CancellationToken.None),
-            DateTimeOffset.UtcNow + TimeSpan.FromSeconds(5));
+                CancellationToken.None));
 
 
         _logger.LogInformation("Build '{Id}' scheduled", request.BuildId);

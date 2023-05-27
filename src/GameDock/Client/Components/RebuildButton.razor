@@ -1,0 +1,33 @@
+﻿@inject HttpClient Http
+@inject IJSRuntime JsRuntime
+
+<button class="btn btn-danger" disabled="@_isLoading" @onclick="Rebuild">
+    @if (_isLoading)
+    {
+        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+        <span class="sr-only">Loading...</span>
+    }
+    else
+    {
+        <span>Rebuild</span>
+    }
+</button>
+
+@code {
+    [Parameter]
+    public Guid BuildId { get; set; }
+
+    bool _isLoading = false;
+
+    private async Task Rebuild()
+    {
+        _isLoading = true;
+        
+        StateHasChanged();
+
+        var requestUrl = $"/api/rebuild/{BuildId}";
+        using var response = await Http.PostAsJsonAsync(requestUrl, new {});
+
+        _isLoading = false;
+    }
+}

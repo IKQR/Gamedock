@@ -20,6 +20,7 @@ public static class ServiceRegister
             .AddScoped<ITransactionManager, TransactionManager>()
             .AddScoped<IBuildInfoRepository, BuildInfoRepository>()
             .AddScoped<IBuildFileRepository, BuildFileRepository>()
+            .AddScoped<ISessionRunner, DockerSessionRunner>()
             .Configure<FileStorageOptions>(opt => opt.Path = configuration.GetConnectionString("FileStorage"))
             .AddScoped<IImageBuilder, DockerImageBuilder>()
             .AddSingleton<IDockerClient>(_ => new DockerClientConfiguration().CreateClient())

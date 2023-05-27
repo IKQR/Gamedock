@@ -18,12 +18,13 @@ public class GetBuildsHandler : IRequestHandler<GetBuildsRequest, IList<BuildInf
 
     public async Task<IList<BuildInfo>> Handle(GetBuildsRequest request, CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Build info requested for [{Ids}]",
-            request.Ids.Any() ? string.Join(", ", request.Ids) : "All");
+        var getAll = !request.Ids.Any();
 
-        var result = await _infos.GetByIdAsync(request.Ids, cancellationToken);
+        _logger.LogInformation("Build info requested for [{Ids}]", getAll ? "All" : string.Join(", ", request.Ids));
 
-        return result;
+        return getAll
+            ? await _infos.GetAllAsync(cancellationToken)
+            : await _infos.GetByIdAsync(request.Ids, cancellationToken);
     }
 }
 

@@ -68,4 +68,16 @@ public class BuildController : ControllerBase
             Status = info.Status.ToString(),
         });
     }
+
+    [HttpPost("/api/rebuild/{buildId:required}")]
+    [ProducesResponseType(200)]
+    public async Task<IActionResult> Rebuild([FromRoute] string buildId, [FromServices] IMediator mediator,
+        CancellationToken cancellationToken)
+    {
+        var id = Guid.Parse(buildId);
+        await mediator.Send(new StartImageBuildRequest(id, "DotnetGameServer", ""),
+            cancellationToken);
+
+        return Ok();
+    }
 }

@@ -1,0 +1,49 @@
+﻿@using GameDock.Shared.Dto
+@using System.Net
+@inject HttpClient Http
+@inject IJSRuntime JsRuntime
+
+<button class="btn btn-primary" disabled="@_isLoading" @onclick="RunBuild">
+    @if (_isLoading)
+    {
+        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+        <span class="sr-only">Loading...</span>
+    }
+    else
+    {
+        <span>Run Build</span>
+    }
+</button>
+
+@code {
+    [Parameter]
+    public Guid BuildId { get; set; }
+
+    bool _isLoading = false;
+
+    private async Task RunBuild()
+    {
+        _isLoading = true;
+
+        var requestUrl = $"/api/build/{BuildId}/run";
+        using var response = await Http.PostAsJsonAsync(requestUrl, new {});
+
+        if (response.IsSuccessStatusCode)
+        {
+            var sessionInfo = await response.Content.ReadFromJsonAsync<SessionInfoDto>();
+
+            var ip = sessionInfo.Ip;
+            var port = sessionInfo.Port;
+            
+            var message = $"Success! Connect your server with `{ip}:{port}`";
+
+            await JsRuntime.InvokeVoidAsync("alert", message);
+        }
+        else
+        {
+            await JsRuntime.InvokeVoidAsync("alert", "Failed to run the build.");
+        }
+
+        _isLoading = false;
+    }
+}

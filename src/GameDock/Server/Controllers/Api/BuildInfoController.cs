@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using GameDock.Server.Application.Handlers;
 using GameDock.Server.Domain.Build;
 using GameDock.Server.Mappers;
+using GameDock.Shared.Dto;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,22 +18,22 @@ public class BuildInfoController : ControllerBase
 {
     [HttpGet]
     [ProducesResponseType(400)]
-    [ProducesResponseType(typeof(BuildInfo[]), 200)]
+    [ProducesResponseType(typeof(BuildInfoDto[]), 200)]
     public async Task<IActionResult> GetAll(
         [FromServices] IMediator mediator,
         CancellationToken cancellationToken)
     {
         var info = await mediator.Send(new GetBuildsRequest(), cancellationToken);
 
-        return Ok(info.Select(BuildInfoDtoMapper.Map));
+        return Ok(info.Select(BuildInfoMapper.Map));
     }
 
     [HttpGet]
     [Route("{id:required}")]
     [ProducesResponseType(400)]
     [ProducesResponseType(404)]
-    [ProducesResponseType(typeof(BuildInfo), 200)]
-    public async Task<IActionResult> GetAll(
+    [ProducesResponseType(typeof(BuildInfoDto), 200)]
+    public async Task<IActionResult> Get(
         [FromRoute] string id,
         [FromServices] IMediator mediator,
         CancellationToken cancellationToken)
@@ -49,6 +50,6 @@ public class BuildInfoController : ControllerBase
             return NotFound();
         }
 
-        return Ok(BuildInfoDtoMapper.Map(info.Single()));
+        return Ok(BuildInfoMapper.Map(info.Single()));
     }
 }

@@ -1,0 +1,12 @@
+﻿@inject NavigationManager NavigationManager
+
+<button class="btn btn-secondary" @onclick="RefreshPage">
+    <i class="bi bi-arrow-repeat"></i>
+</button>
+
+@code {
+    private void RefreshPage()
+    {
+        NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
+    }
+}

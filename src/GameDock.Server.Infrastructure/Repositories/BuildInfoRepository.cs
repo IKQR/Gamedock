@@ -42,6 +42,13 @@ public class BuildInfoRepository : IBuildInfoRepository
         return entities.Select(BuildInfoMapper.Map).ToList();
     }
 
+    public async Task<IList<BuildInfo>> GetAllAsync(CancellationToken cancellationToken = default)
+    {
+        var entities = await _context.BuildInfos.ToListAsync(cancellationToken: cancellationToken);
+
+        return entities.Select(BuildInfoMapper.Map).ToList();
+    }
+
     public async Task<BuildInfo> GetByNameAsync(string name, string version, CancellationToken cancellationToken)
     {
         var entity =

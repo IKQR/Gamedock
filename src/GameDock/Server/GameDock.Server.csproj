@@ -3,6 +3,7 @@
     <PropertyGroup>
         <TargetFramework>net7.0</TargetFramework>
         <RootNamespace>GameDock.Server</RootNamespace>
+        <UserSecretsId>e3b2dba6-04cb-41b0-9477-76c152e3701c</UserSecretsId>
     </PropertyGroup>
 
     <ItemGroup>
