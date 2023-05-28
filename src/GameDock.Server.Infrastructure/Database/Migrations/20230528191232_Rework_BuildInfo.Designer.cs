@@ -3,6 +3,7 @@ using System;
 using GameDock.Server.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GameDock.Server.Infrastructure.Database.Migrations
 {
     [DbContext(typeof(InfoDbContext))]
-    partial class InfoDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230528191232_Rework_BuildInfo")]
+    partial class Rework_BuildInfo
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.5");

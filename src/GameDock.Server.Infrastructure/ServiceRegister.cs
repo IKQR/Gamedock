@@ -23,7 +23,7 @@ public static class ServiceRegister
             .AddScoped<ISessionRunner, DockerSessionRunner>()
             .Configure<FileStorageOptions>(opt => opt.Path = configuration.GetConnectionString("FileStorage"))
             // TODO return it
-            // .AddScoped<IImageBuilder, DockerImageBuilder>()
+            .AddScoped<IImageBuilder, DockerImageBuilder>()
             .AddSingleton<IDockerClient>(_ => new DockerClientConfiguration().CreateClient())
             .AddHangfire(cfg => cfg
                 .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)

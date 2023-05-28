@@ -127,3 +127,14 @@
 //             ENTRYPOINT [""./{runtimePath}"", ""{launchParameters}""]
 //         ";
 // }
+
+using GameDock.Server.Application.Services;
+
+public class DockerImageBuilder : IImageBuilder
+{
+    public Task BuildImageFromArchive(Guid id, string runtimePath, string launchParameters,
+        CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
+    }
+}
