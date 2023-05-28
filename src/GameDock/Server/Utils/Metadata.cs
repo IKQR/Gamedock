@@ -12,7 +12,7 @@ public static class Metadata
         var jObject = new JObject();
         foreach (var data in metadata)
         {
-            jObject.Add(data.Key, JToken.Parse(data.Value.GetString(Encoding.Default)));
+            jObject.Add(data.Key, data.Value.GetString(Encoding.Default));
         }
 
         return jObject.ToObject<T>();

@@ -23,7 +23,7 @@
 
             <div class="form-group col-sm-6">
                 <label>Upload File:</label>
-                <input type="file" class="form-control" @ref="_fileInput"/>
+                <input type="file" class="form-control" @ref="_fileInput" @onchange="HandleFileSelection" accept=".tar"/>
             </div>
         </div>
 

@@ -17,19 +17,13 @@ namespace GameDock.Server.Controllers.Api;
 public class BuildInfoController : ControllerBase
 {
     [HttpGet]
-    [ProducesResponseType(204)]
     [ProducesResponseType(typeof(IEnumerable<BuildInfoDto>), 200)]
     public async Task<IActionResult> GetAll([FromServices] IMediator mediator, CancellationToken cancellationToken,
         [FromQuery] string name = null, [FromQuery] string version = null)
     {
         var results = await mediator.Send(new GetBuildsRequest(Name: name, Version: version), cancellationToken);
 
-        if (!results.Any())
-        {
-            return NoContent();
-        }
-
-        return Ok(results.Select(BuildInfoMapper.Map));
+        return Ok(!results.Any() ? Array.Empty<BuildInfoDto>() : results.Select(BuildInfoMapper.Map));
     }
 
     [HttpGet]

@@ -1,9 +1,12 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Json;
 using System.Text.Json;
 using System.Threading.Tasks;
 using GameDock.Shared;
+using GameDock.Shared.Dto;
 using GameDock.Shared.Responses;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
@@ -17,6 +20,7 @@ public partial class ArchiveUpload : ComponentBase
     // Injects
     [Inject] public IJSRuntime JS { get; set; }
     [Inject] public HttpClient Http { get; set; }
+    [Inject] public NavigationManager NavigationManager { get; set; }
 
     // Styles
     private int _progressPercentage = 0;
@@ -25,6 +29,11 @@ public partial class ArchiveUpload : ComponentBase
     private ElementReference _fileInput;
     private BuildMetadata _buildMetadata = new();
 
+    private void HandleFileSelection(ChangeEventArgs e)
+    {
+        _buildMetadata.FileName = Path.GetFileName(e.Value?.ToString());
+    }
+    
     private async Task HandleValidSubmit()
     {
         var requestUri = new Uri(Http.BaseAddress!, "/api/build/upload").ToString();
@@ -36,7 +45,11 @@ public partial class ArchiveUpload : ComponentBase
     [JSInvokable]
     public async Task OnSuccess()
     {
-        await JS.InvokeVoidAsync("console.log", "success");
+        var results =
+            await Http.GetFromJsonAsync<BuildInfoDto[]>(
+                $"api/build/info?name={_buildMetadata.BuildName}&version={_buildMetadata.Version}");
+        
+        NavigationManager.NavigateTo($"/builds/{results.Single().Id}");
     }
 
     [JSInvokable]
