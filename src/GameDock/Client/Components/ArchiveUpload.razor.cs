@@ -8,88 +8,46 @@ using GameDock.Shared.Responses;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.JSInterop;
+using TusDotNetClient;
 
 namespace GameDock.Client.Components;
 
 public partial class ArchiveUpload : ComponentBase
 {
-    [Inject]
-    public HttpClient Http { get; set; }
-
-    [Inject]
-    public NavigationManager NavigationManager { get; set; }
-
-    [Inject]
-    public IJSRuntime JS { get; set; }
-
-    [Parameter]
-    public string NavigateOnSuccess { get; set; }
-
-    private readonly UploadRequest _uploadRequest = new();
-    private IBrowserFile _selectedFile;
-
+    // Injects
+    [Inject] public IJSRuntime JS { get; set; }
+    [Inject] public HttpClient Http { get; set; }
+    
+    // Styles
     private int _progressPercentage = 0;
-
-    private void HandleFileSelected(InputFileChangeEventArgs e)
-    {
-        _selectedFile = e.File;
-    }
+    
+    // Models
+    private ElementReference _fileInput;
+    private UploadRequest _uploadRequest = new();
 
     private async Task HandleValidSubmit()
     {
-        // Set buffer size to 512 KB.
-        var bufferSize = 512 * 1024;
-        var buffer = System.Buffers.ArrayPool<byte>.Shared.Rent(bufferSize);
-        var totalBytesRead = 0L;
-        var fileSize = _selectedFile.Size;
+        var requestUri = new Uri(Http.BaseAddress!, "/api/build/upload").ToString();
 
-        var stream = _selectedFile.OpenReadStream(maxAllowedSize: long.MaxValue);
+        await JS.InvokeVoidAsync("tusUpload", _fileInput, requestUri, _uploadRequest, DotNetObjectReference.Create(this));
+    }
 
-        try
-        {
-            int bytesRead;
-            var chunkNumber = 0;
-            var totalChunks = (int)Math.Ceiling((double)fileSize / bufferSize);
+    [JSInvokable]
+    public async Task OnSuccess()
+    {
+        await JS.InvokeVoidAsync("console.log", "success");
+    }
 
-            while ((bytesRead = await stream.ReadAsync(buffer)) != 0)
-            {
-                totalBytesRead += bytesRead;
-                _progressPercentage = (int)(100 * totalBytesRead / fileSize);
-                await InvokeAsync(StateHasChanged);
+    [JSInvokable]
+    public async Task OnProgress(double bytesUploaded, double bytesTotal)
+    {
+        _progressPercentage = (int)(bytesUploaded / bytesTotal * 100);
+        StateHasChanged();
+    }
 
-                var chunkContent = new ByteArrayContent(buffer, 0, bytesRead);
-                chunkNumber++;
-
-                var formData = new MultipartFormDataContent
-                {
-                    { chunkContent, "archive", _selectedFile.Name },
-                    { new StringContent(_uploadRequest.BuildName), "BuildName" },
-                    { new StringContent(_uploadRequest.Version), "Version" },
-                    { new StringContent(_uploadRequest.RuntimePah), "RuntimePah" },
-                    { new StringContent(_uploadRequest.LaunchParameters ?? string.Empty), "LaunchParameters" },
-                };
-
-                formData.Headers.Add("Chunk-Number", chunkNumber.ToString());
-                formData.Headers.Add("Total-Chunks", totalChunks.ToString());
-
-                var response = await Http.PostAsync("/api/build", formData);
-
-                if (!response.IsSuccessStatusCode) break;
-                if (chunkNumber != totalChunks) continue;
-
-                var content = await response.Content.ReadAsStreamAsync();
-                var uploadResponse = await JsonSerializer.DeserializeAsync<UploadResponse>(content,
-                    new JsonSerializerOptions
-                    {
-                        PropertyNameCaseInsensitive = true,
-                    });
-
-                NavigationManager.NavigateTo($"/builds/{uploadResponse.Id}");
-            }
-        }
-        finally
-        {
-            System.Buffers.ArrayPool<byte>.Shared.Return(buffer);
-        }
+    [JSInvokable]
+    public async Task OnError(string error)
+    {
+        await JS.InvokeVoidAsync("console.log", "error");
     }
 }

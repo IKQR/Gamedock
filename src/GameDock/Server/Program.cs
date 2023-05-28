@@ -2,6 +2,7 @@ using GameDock.Server.Application;
 using GameDock.Server.Hosted;
 using GameDock.Server.Infrastructure;
 using GameDock.Server.Infrastructure.Database;
+using GameDock.Server.TUS;
 using GameDock.Server.Utils;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http.Features;
@@ -9,6 +10,7 @@ using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using tusdotnet;
 
 // Host
 var builder = WebApplication.CreateBuilder(args);
@@ -37,7 +39,7 @@ builder.Services
     .MigrateOnStartup();
 
 // Application
-var app = builder.Build();
+var app =  builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
@@ -56,6 +58,7 @@ app
     .UseStaticFiles()
     .UseRouting();
 
+app.MapBuildUpload(app.Configuration);
 app.MapRazorPages();
 app.MapControllers();
 app.MapFallbackToFile("index.html");
