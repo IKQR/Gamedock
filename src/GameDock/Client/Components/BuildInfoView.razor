@@ -1,0 +1,30 @@
+﻿@using GameDock.Shared.Dto
+<h3>BuildInfoView</h3>
+
+<div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Name: @BuildInfo.Name</h5>
+            <p class="card-text">Version: @BuildInfo.Version</p>
+            <p class="card-text">
+                Status:&nbsp;
+                @switch (BuildInfo.Status)
+                {
+                    case "Deleted":
+                        <span class="text-danger">Deleted</span>
+                        break;
+                    case "Saved":
+                        <span class="text-success">Saved</span>
+                        break;
+                    default:
+                        <span class="text-info">Unknown</span>
+                        break;
+                }
+            </p>
+            <p class="card-text">Created At: @BuildInfo.CreatedAt.ToLocalTime().ToString("G")</p>
+        </div>
+    </div>
+
+@code {
+    [Parameter]
+    public BuildInfoDto BuildInfo { get; set; }
+}

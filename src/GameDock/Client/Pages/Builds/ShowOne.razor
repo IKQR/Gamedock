@@ -1,11 +1,8 @@
 ﻿@page "/builds/{id}"
 @using GameDock.Shared.Dto
-@using System.Globalization
 
 @inject HttpClient HttpClient
 @inject NavigationManager NavigationManager
-
-<h3>Build Info</h3>
 
 <div class="row">
     <div class="col-md">
@@ -32,26 +29,7 @@
 }
 else if (_buildInfo != null)
 {
-    <div class="card">
-        <div class="card-body">
-            <h5 class="card-title">Name: @_buildInfo.Name</h5>
-            <p class="card-text">Version: @_buildInfo.Version</p>
-            <p class="card-text">Status: @_buildInfo.Status</p>
-            <p class="card-text">Created At: @_buildInfo.CreatedAt.ToString(CultureInfo.InvariantCulture)</p>
-            <p class="card-text">Updated At: @_buildInfo.UpdatedAt.ToString(CultureInfo.InvariantCulture)</p>
-        </div>
-    </div>
-    <div class="mt-2 btn-toolbar">
-
-        <RunButton BuildId="@_buildInfo.Id"/>
-
-        @if (_buildInfo.Status == "Failed")
-        {
-            <span class="ms-2">
-                <RebuildButton BuildId="@_buildInfo.Id"/>
-            </span>
-        }
-    </div>
+    <BuildInfoView BuildInfo="_buildInfo" />
 }
 else
 {
@@ -80,6 +58,4 @@ else
         _buildInfo = await HttpClient.GetFromJsonAsync<BuildInfoDto>($"/api/build/info/{Id}");
         _isLoading = false;
     }
-
 }
-

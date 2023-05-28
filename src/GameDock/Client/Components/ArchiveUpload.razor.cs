@@ -53,10 +53,11 @@ public partial class ArchiveUpload : ComponentBase
     }
 
     [JSInvokable]
-    public async Task OnProgress(double bytesUploaded, double bytesTotal)
+    public Task OnProgress(double bytesUploaded, double bytesTotal)
     {
         _progressPercentage = (int)(bytesUploaded / bytesTotal * 100);
         StateHasChanged();
+        return Task.CompletedTask;
     }
 
     [JSInvokable]
