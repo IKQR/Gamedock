@@ -12,17 +12,15 @@ public class BuildInfoRepository : IBuildInfoRepository
 {
     private readonly InfoDbContext _context;
 
-    public BuildInfoRepository(InfoDbContext context)
-    {
-        _context = context;
-    }
+    public BuildInfoRepository(InfoDbContext context) => _context = context;
 
-    public async Task<BuildInfo> AddAsync(string name, string version, CancellationToken cancellationToken)
+    public async Task<BuildInfo> AddAsync(string name, string version, string runtimePath, CancellationToken cancellationToken)
     {
         var entity = new BuildInfoEntity
         {
             Name = name,
             Version = version,
+            RuntimePath = runtimePath,
         };
 
         var entry = await _context.BuildInfos.AddAsync(entity, cancellationToken);
@@ -32,33 +30,36 @@ public class BuildInfoRepository : IBuildInfoRepository
         return BuildInfoMapper.Map(entry.Entity);
     }
 
-    public async Task<IList<BuildInfo>> GetByIdAsync(IEnumerable<Guid> ids,
-        CancellationToken cancellationToken = default)
-    {
-        var entities = await _context.BuildInfos
-            .Where(x => ids.Contains(x.Id))
-            .ToListAsync(cancellationToken: cancellationToken);
-
-        return entities.Select(BuildInfoMapper.Map).ToList();
-    }
-
-    public async Task<IList<BuildInfo>> GetAllAsync(CancellationToken cancellationToken = default)
+    public async Task<IList<BuildInfo>> GetAllAsync(CancellationToken cancellationToken)
     {
         var entities = await _context.BuildInfos.ToListAsync(cancellationToken: cancellationToken);
 
         return entities.Select(BuildInfoMapper.Map).ToList();
     }
 
-    public async Task<BuildInfo> GetByNameAsync(string name, string version, CancellationToken cancellationToken)
+    public async Task<BuildInfo> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        var entity =
-            await _context.BuildInfos.FirstOrDefaultAsync(x => x.Name == name && x.Version == version,
-                cancellationToken);
+        var entity = await _context.BuildInfos.Where(x => x.Id == id)
+            .FirstOrDefaultAsync(cancellationToken: cancellationToken);
 
         return BuildInfoMapper.Map(entity);
     }
 
-    public async Task ChangeStatus(Guid id, BuildStatus status, CancellationToken cancellationToken)
+    public async Task<IList<BuildInfo>> GetByNameAsync(string name, string version, CancellationToken cancellationToken)
+    {
+        var query = _context.BuildInfos.Where(x => x.Name == name);
+
+        if (version is not null)
+        {
+            query = query.Where(x => x.Version == version);
+        }
+
+        var result = await query.ToListAsync(cancellationToken: cancellationToken);
+
+        return result.Select(BuildInfoMapper.Map).ToList();
+    }
+
+    public async Task SetAsDeleted(Guid id, CancellationToken cancellationToken)
     {
         var entity = await _context.BuildInfos.FindAsync(new object[] { id }, cancellationToken);
 
@@ -67,7 +68,7 @@ public class BuildInfoRepository : IBuildInfoRepository
             return;
         }
 
-        entity.Status = status;
+        entity.Status = BuildStatus.Deleted;
 
         await _context.SaveChangesAsync(cancellationToken);
     }

@@ -1,19 +1,21 @@
-﻿using System.IO;
-using Microsoft.AspNetCore.Http;
+﻿using System;
+using System.IO;
+using GameDock.Server.Application.Handlers;
+using GameDock.Server.Domain.Enums;
+using GameDock.Server.Utils;
+using GameDock.Shared;
+using MediatR;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using tusdotnet;
 
 namespace GameDock.Server.TUS;
 
 public static class BuildFileUpload
 {
-    public static TApplication MapBuildUpload<TApplication>(this TApplication app, IConfiguration configuration)
-        where TApplication : IEndpointRouteBuilder
-    {
-        app.MapTus("/api/build/upload", async _ => new()
+    public static IEndpointConventionBuilder MapBuildUpload(this IEndpointRouteBuilder builder) =>
+        builder.MapTus("/api/build/upload", async _ => new()
         {
             Store = new tusdotnet.Stores.TusDiskStore(Path.GetTempPath()),
             Events = new()
@@ -26,12 +28,21 @@ public static class BuildFileUpload
                     var metadata = await file.GetMetadataAsync(cancellationToken);
                     await using var fileStream = await file.GetContentAsync(cancellationToken);
 
-                    var logger = eventContext.HttpContext.RequestServices.GetService<ILogger<Program>>();
-                    logger.LogInformation("File uploaded. File: '{Filename}'. Metadata: {@Meta}", file.Id, metadata);
+                    var buildInfo = metadata.Deserialize<BuildMetadata>();
+
+                    var fileType = Path.GetExtension(buildInfo.FileName) switch
+                    {
+                        ".tar" => BuildArchiveType.Tar,
+                        // ".zip" => BuildArchiveType.Zip,
+                        _ => throw new ArgumentOutOfRangeException("fileType"),
+                    };
+
+                    var request = new SaveBuildRequest(buildInfo.BuildName, buildInfo.Version, buildInfo.RuntimePah,
+                        fileStream, fileType);
+
+                    await eventContext.HttpContext.RequestServices.GetRequiredService<IMediator>()
+                        .Send(request, cancellationToken);
                 },
             },
         });
-
-        return app;
-    }
 }

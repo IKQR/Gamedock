@@ -3,7 +3,7 @@ using System.IO;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
-using GameDock.Shared.Requests;
+using GameDock.Shared;
 using GameDock.Shared.Responses;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
@@ -17,19 +17,20 @@ public partial class ArchiveUpload : ComponentBase
     // Injects
     [Inject] public IJSRuntime JS { get; set; }
     [Inject] public HttpClient Http { get; set; }
-    
+
     // Styles
     private int _progressPercentage = 0;
-    
+
     // Models
     private ElementReference _fileInput;
-    private UploadRequest _uploadRequest = new();
+    private BuildMetadata _buildMetadata = new();
 
     private async Task HandleValidSubmit()
     {
         var requestUri = new Uri(Http.BaseAddress!, "/api/build/upload").ToString();
 
-        await JS.InvokeVoidAsync("tusUpload", _fileInput, requestUri, _uploadRequest, DotNetObjectReference.Create(this));
+        await JS.InvokeVoidAsync("tusUpload", _fileInput, requestUri, _buildMetadata,
+            DotNetObjectReference.Create(this));
     }
 
     [JSInvokable]

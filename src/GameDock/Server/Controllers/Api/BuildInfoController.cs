@@ -17,15 +17,19 @@ namespace GameDock.Server.Controllers.Api;
 public class BuildInfoController : ControllerBase
 {
     [HttpGet]
-    [ProducesResponseType(400)]
-    [ProducesResponseType(typeof(BuildInfoDto[]), 200)]
-    public async Task<IActionResult> GetAll(
-        [FromServices] IMediator mediator,
-        CancellationToken cancellationToken)
+    [ProducesResponseType(204)]
+    [ProducesResponseType(typeof(IEnumerable<BuildInfoDto>), 200)]
+    public async Task<IActionResult> GetAll([FromServices] IMediator mediator, CancellationToken cancellationToken,
+        [FromQuery] string name = null, [FromQuery] string version = null)
     {
-        var info = await mediator.Send(new GetBuildsRequest(), cancellationToken);
+        var results = await mediator.Send(new GetBuildsRequest(Name: name, Version: version), cancellationToken);
 
-        return Ok(info.Select(BuildInfoMapper.Map));
+        if (!results.Any())
+        {
+            return NoContent();
+        }
+
+        return Ok(results.Select(BuildInfoMapper.Map));
     }
 
     [HttpGet]
@@ -33,17 +37,15 @@ public class BuildInfoController : ControllerBase
     [ProducesResponseType(400)]
     [ProducesResponseType(404)]
     [ProducesResponseType(typeof(BuildInfoDto), 200)]
-    public async Task<IActionResult> Get(
-        [FromRoute] string id,
-        [FromServices] IMediator mediator,
-        CancellationToken cancellationToken)
+    public async Task<IActionResult> Get([FromServices] IMediator mediator, CancellationToken cancellationToken,
+        [FromRoute] string id)
     {
         if (!Guid.TryParse(id, out var guidId))
         {
             return BadRequest();
         }
 
-        var info = await mediator.Send(new GetBuildsRequest(guidId), cancellationToken);
+        var info = await mediator.Send(new GetBuildsRequest(Id: guidId), cancellationToken);
 
         if (!info.Any())
         {

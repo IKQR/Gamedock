@@ -26,32 +26,18 @@ public class SaveBuildRequestHandler : IRequestHandler<SaveBuildRequest, BuildIn
 
     public async Task<BuildInfo> Handle(SaveBuildRequest request, CancellationToken cancellationToken)
     {
-        var archive = request.Archive;
-        try
+        var result = await _transaction.InTransactionAsync(async token =>
         {
-            if (request.Type is BuildArchiveType.Zip)
-            {
-                archive = await ArchiveHelper.ZipToTarAsync(archive, true);
-            }
+            var info = await _infos.AddAsync(request.Name, request.Version, request.Path, cancellationToken);
 
-            var result = await _transaction.InTransactionAsync(async token =>
-                {
-                    var info = await _infos.AddAsync(request.BuildName, request.Version, token);
+            await _files.SaveAsync(info.Id.ToString(), request.Stream, token);
 
-                    await _files.SaveAsync(info.Id.ToString(), archive, token);
+            return info;
+        }, cancellationToken);
 
-                    return info;
-                },
-                cancellationToken);
-
-            return result;
-        }
-        finally
-        {
-            await archive.DisposeAsync();
-        }
+        return result;
     }
 }
 
-public record SaveBuildRequest(string BuildName, string Version, BuildArchiveType Type, Stream Archive)
+public record SaveBuildRequest(string Name, string Version, string Path, Stream Stream, BuildArchiveType Type)
     : IRequest<BuildInfo>;

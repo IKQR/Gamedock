@@ -1,7 +1,8 @@
-﻿namespace GameDock.Shared.Requests;
+﻿namespace GameDock.Shared;
 
-public class UploadRequest
+public class BuildMetadata
 {
+    public string FileName { get; set; }
     public string BuildName { get; set; }
     public string Version { get; set; }
     public string RuntimePah { get; set; }

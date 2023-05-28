@@ -58,7 +58,7 @@ app
     .UseStaticFiles()
     .UseRouting();
 
-app.MapBuildUpload(app.Configuration);
+app.MapBuildUpload();
 app.MapRazorPages();
 app.MapControllers();
 app.MapFallbackToFile("index.html");
