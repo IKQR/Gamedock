@@ -1,9 +1,11 @@
 ﻿using GameDock.Server.Infrastructure.Entities;
+using GameDock.Server.Infrastructure.Entities.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace GameDock.Server.Infrastructure.Database;
 
-public class InfoDbContext : DbContext
+public class InfoDbContext : IdentityDbContext<AppUser, AppRole, string>
 {
     public DbSet<BuildInfoEntity> BuildInfos { get; set; }
 
