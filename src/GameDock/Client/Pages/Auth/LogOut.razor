@@ -1,0 +1,27 @@
+﻿@attribute [Authorize]
+@using GameDock.Client.Services
+@inject AuthService AuthService
+@inject NavigationManager Navigation
+
+<div class="center-screen">
+    <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+</div>
+
+@code {
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            await AuthService.SignOutAsync();
+            Navigation.NavigateTo("/auth/login");
+        }
+        catch
+        {
+            Navigation.NavigateTo("/");
+        }
+    }
+
+}
