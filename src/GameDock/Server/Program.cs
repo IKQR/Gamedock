@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using tusdotnet;
+using Microsoft.AspNetCore.Identity;
 
 // Host
 var builder = WebApplication.CreateBuilder(args);
@@ -26,20 +27,18 @@ if (builder.Environment.IsDevelopment())
     mvcBuilder.AddRazorRuntimeCompilation();
 }
 
-builder.Services.Configure<KestrelServerOptions>(options =>
-{
-    options.Limits.MaxRequestBodySize = int.MaxValue;
-});
+builder.Services.Configure<KestrelServerOptions>(options => { options.Limits.MaxRequestBodySize = int.MaxValue; });
 
 builder.Services
     .ConfigureJson()
     .ConfigureSwagger()
     .RegisterApplication()
     .RegisterInfrastructure(builder.Configuration)
+    .ConfigureAuth()
     .MigrateOnStartup();
 
 // Application
-var app =  builder.Build();
+var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
@@ -51,12 +50,17 @@ else
     app.UseHsts();
 }
 
-app
-    .UseHttpsRedirection()
-    .ConfigureExceptionHandler()
-    .UseBlazorFrameworkFiles()
-    .UseStaticFiles()
-    .UseRouting();
+app.UseHttpsRedirection();
+
+app.UseBlazorFrameworkFiles();
+app.UseStaticFiles();
+
+app.UseRouting();
+
+app.UseIdentityServer();
+app.UseAuthorization();
+
+app.ConfigureExceptionHandler();
 
 app.MapBuildUpload();
 app.MapRazorPages();
