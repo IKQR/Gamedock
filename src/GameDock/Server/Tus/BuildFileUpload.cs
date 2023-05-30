@@ -26,6 +26,11 @@ public static class BuildFileUpload
             Expiration = new SlidingExpiration(TimeSpan.FromHours(1)),
             Events = new()
             {
+                OnCreateCompleteAsync = async e => { },
+                OnBeforeCreateAsync = async e => { },
+                OnAuthorizeAsync = async e => { },
+                OnBeforeDeleteAsync = async e => { },
+                OnDeleteCompleteAsync = async e => { },
                 OnFileCompleteAsync = async ctx =>
                 {
                     var cancellationToken = ctx.CancellationToken;
