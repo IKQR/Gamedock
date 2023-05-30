@@ -20,6 +20,7 @@ public static class ServiceRegister
             .AddScoped<ITransactionManager, TransactionManager>()
             .AddScoped<IBuildInfoRepository, BuildInfoRepository>()
             .AddScoped<IBuildFileRepository, BuildFileRepository>()
+            .AddScoped<IFleetInfoRepository, FleetInfoRepository>()
             .AddScoped<ISessionRunner, DockerSessionRunner>()
             .Configure<FileStorageOptions>(opt => opt.Path = configuration.GetConnectionString("FileStorage"))
             // TODO return it

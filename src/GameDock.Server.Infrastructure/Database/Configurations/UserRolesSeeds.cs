@@ -16,6 +16,7 @@ public class UserRolesSeeds : IEntityTypeConfiguration<AppRole>, IEntityTypeConf
         NormalizedEmail = "ADMIN@ADMIN.ORG",
         UserName = "admin",
         NormalizedUserName = "ADMIN",
+        PasswordHash = new PasswordHasher<AppUser>().HashPassword(null!, "admin"),
     };
 
     private static readonly AppRole AdminRole = new()
@@ -32,13 +33,7 @@ public class UserRolesSeeds : IEntityTypeConfiguration<AppRole>, IEntityTypeConf
         NormalizedName = "USER",
     };
 
-    public void Configure(EntityTypeBuilder<AppUser> builder)
-    {
-        var passwordHash = new PasswordHasher<AppUser>().HashPassword(AdminUser, "admin");
-        AdminUser.PasswordHash = passwordHash;
-        
-        builder.HasData(AdminUser);
-    }
+    public void Configure(EntityTypeBuilder<AppUser> builder) => builder.HasData(AdminUser);
 
     public void Configure(EntityTypeBuilder<AppRole> builder) => builder.HasData(UserRole, AdminRole);
 

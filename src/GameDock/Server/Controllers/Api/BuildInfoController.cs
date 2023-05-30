@@ -8,10 +8,12 @@ using GameDock.Server.Domain.Build;
 using GameDock.Server.Mappers;
 using GameDock.Shared.Dto;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GameDock.Server.Controllers.Api;
 
+[Authorize]
 [ApiController]
 [Route("api/build/info")]
 public class BuildInfoController : ControllerBase

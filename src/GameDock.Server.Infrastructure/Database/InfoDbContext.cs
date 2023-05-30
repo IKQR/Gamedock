@@ -7,6 +7,7 @@ namespace GameDock.Server.Infrastructure.Database;
 
 public class InfoDbContext : IdentityDbContext<AppUser, AppRole, string>
 {
+    public DbSet<FleetInfoEntity> FleetInfos { get; set; }
     public DbSet<BuildInfoEntity> BuildInfos { get; set; }
 
     public InfoDbContext(DbContextOptions<InfoDbContext> options) : base(options)

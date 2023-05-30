@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using GameDock.Server.Infrastructure.Entities.Identity;
 using GameDock.Server.Utils;
 using GameDock.Shared.Requests;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -27,6 +28,7 @@ public class AuthController : ControllerBase
         _userManager = userManager;
     }
 
+    [AllowAnonymous]
     [HttpPost("token")]
     [ProducesResponseType(200)]
     [ProducesResponseType(400)]
