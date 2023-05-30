@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 
-namespace GameDock.Shared.Requests;
+namespace GameDock.Shared.Dto;
 
-public class CreateFleetRequestDto
+public class CreateFleetDto
 {
     [Required]
     public Guid BuildId { get; set; }

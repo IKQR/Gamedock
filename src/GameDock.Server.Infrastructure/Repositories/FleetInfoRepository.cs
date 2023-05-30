@@ -30,6 +30,7 @@ public class FleetInfoRepository : IFleetInfoRepository
         };
 
         var entry = await _context.FleetInfos.AddAsync(entity, cancellationToken);
+        await _context.SaveChangesAsync(cancellationToken);
 
         return FleetInfoMapper.Map(entry.Entity);
     }
