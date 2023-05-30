@@ -3,6 +3,7 @@ using System;
 using GameDock.Server.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GameDock.Server.Infrastructure.Database.Migrations
 {
     [DbContext(typeof(InfoDbContext))]
-    partial class InfoDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230530131623_Add_Identity")]
+    partial class Add_Identity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.5");
@@ -80,20 +83,6 @@ namespace GameDock.Server.Infrastructure.Database.Migrations
                         .HasDatabaseName("RoleNameIndex");
 
                     b.ToTable("AspNetRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "313f6f44-4aa3-4720-beed-23fdf2a31b01",
-                            Name = "User",
-                            NormalizedName = "USER"
-                        },
-                        new
-                        {
-                            Id = "4459f5a8-08f4-4303-b506-534fa2bed5dd",
-                            Name = "Admin",
-                            NormalizedName = "ADMIN"
-                        });
                 });
 
             modelBuilder.Entity("GameDock.Server.Infrastructure.Entities.Identity.AppUser", b =>
@@ -158,24 +147,6 @@ namespace GameDock.Server.Infrastructure.Database.Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "20ceda78-8778-488a-9ae1-321a1ce43bfb",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "055ecc95-3dc4-4b6c-bd2a-b14064e2ef70",
-                            Email = "admin@admin.org",
-                            EmailConfirmed = false,
-                            LockoutEnabled = false,
-                            NormalizedEmail = "ADMIN@ADMIN.ORG",
-                            NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAIAAYagAAAAEC/i79f3/vS6uoQxe8k6UgADnJ6/4SwdVhuAI3KNWAyDgiTdQbZIj7wGAL7/EKG4Jw==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "a9b00ba1-84bc-4c4a-80f8-4d5ff33c15a5",
-                            TwoFactorEnabled = false,
-                            UserName = "admin"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -259,13 +230,6 @@ namespace GameDock.Server.Infrastructure.Database.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = "20ceda78-8778-488a-9ae1-321a1ce43bfb",
-                            RoleId = "4459f5a8-08f4-4303-b506-534fa2bed5dd"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>

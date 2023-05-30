@@ -17,6 +17,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Logging.UseSerilog();
 
 // Services
+builder.Services.ConfigureAuth(builder.Configuration);
+
 builder.Services.AddControllersWithViews();
 
 var mvcBuilder = builder.Services.AddRazorPages();
@@ -50,13 +52,16 @@ else
 {
     app.UseHsts();
 }
-
+app.UseDeveloperExceptionPage();
 app
     .UseHttpsRedirection()
     .ConfigureExceptionHandler()
     .UseBlazorFrameworkFiles()
     .UseStaticFiles()
     .UseRouting();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapBuildUpload();
 app.MapRazorPages();
