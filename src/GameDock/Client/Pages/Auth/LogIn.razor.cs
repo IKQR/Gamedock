@@ -24,7 +24,7 @@ public partial class LogIn : ComponentBase
             var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
             if (authState?.User?.Identity is { IsAuthenticated: true })
             {
-                Navigation.NavigateTo("/builds");
+                Navigation.NavigateTo("/builds", forceLoad: true);
             }
         }
         else

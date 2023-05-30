@@ -1,4 +1,5 @@
-﻿@attribute [Authorize]
+﻿@page "/auth/logout"
+@attribute [Authorize]
 @using GameDock.Client.Services
 @inject AuthService AuthService
 @inject NavigationManager Navigation
@@ -16,7 +17,7 @@
         try
         {
             await AuthService.SignOutAsync();
-            Navigation.NavigateTo("/auth/login");
+            Navigation.NavigateTo("/auth/login", true);
         }
         catch
         {

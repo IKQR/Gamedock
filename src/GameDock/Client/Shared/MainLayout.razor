@@ -1,21 +1,44 @@
 ﻿@inherits LayoutComponentBase
+@inject NavigationManager NavigationManager
 
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
-
-    <main>
-        <div class="top-row px-4">
-            <AuthorizeView>
-                <Authorized>
-                    @context.User.Identity!.Name (@(context.User.IsInRole("Admin") ? "Admin" : "User" ))
-                </Authorized>
-            </AuthorizeView>
+<AuthorizeView>
+    <NotAuthorized>
+        <div class="page">
+            <main>
+                <article class="content px-4">
+                    @Body
+                </article>
+            </main>
         </div>
-        
-        <article class="content px-4">
-            @Body
-        </article>
-    </main>
-</div>
+    </NotAuthorized>
+    <Authorized>
+        <div class="page">
+            <div class="sidebar">
+                <NavMenu/>
+            </div>
+
+            <main>
+                <div class="top-row px-4">
+                    <form @onsubmit="Logout">
+                        <button type="submit" class="nav-link btn btn-link text-dark">
+                            Logout (@context.User.Identity!.Name)
+                        </button>
+                    </form>
+                </div>
+
+                <article class="content px-4">
+                    @Body
+                </article>
+            </main>
+        </div>
+    </Authorized>
+</AuthorizeView>
+
+@code{
+
+    private void Logout()
+    {
+        NavigationManager.NavigateTo("/auth/logout");
+    }
+
+}
