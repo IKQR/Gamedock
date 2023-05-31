@@ -32,9 +32,11 @@
             var sessionInfo = await response.Content.ReadFromJsonAsync<SessionInfoDto>();
 
             var ip = sessionInfo.Ip;
-            var port = sessionInfo.Port;
+            var ports = sessionInfo.Ports;
+
+            var addresses = string.Join("<br>", ports.Select(p => $"`{ip}:{p}`"));
             
-            var message = $"Success! Connect your server with `{ip}:{port}`";
+            var message = $"Success! Connect your server with <br> {addresses}";
 
             await JsRuntime.InvokeVoidAsync("alert", message);
         }

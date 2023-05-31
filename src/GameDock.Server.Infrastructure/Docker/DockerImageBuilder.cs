@@ -40,16 +40,18 @@ public class DockerImageBuilder : IImageBuilder
         {
             var originalFile = buildInfo.Id.ToString();
             var tempFile = Path.Combine(Path.GetTempPath(), fleetId.ToString());
-            var dockerfile =
-                Dockerfiles.GetLinuxDockerfile(fleetInfo.Ports, buildInfo.RuntimePath, fleetInfo.LaunchParameters);
+            var dockerfile = DockerfileFactory
+                .GetLinuxDockerfile(fleetInfo.Ports, buildInfo.RuntimePath, fleetInfo.LaunchParameters);
 
             await PrepareSourceFile(originalFile, tempFile, dockerfile);
             var source = File.OpenRead(tempFile);
 
+            var imageName = $"game-server-{fleetId}:latest";
+
             var buildParameters = new ImageBuildParameters
             {
                 Dockerfile = Dockerfile,
-                Tags = new List<string> { $"game-server-{fleetId}:latest" },
+                Tags = new List<string> { imageName },
             };
 
             var buildProgress = new Progress<JSONMessage>((x) => HandleBuildProgress(fleetId, x));
@@ -63,6 +65,7 @@ public class DockerImageBuilder : IImageBuilder
                 cancellationToken);
 
             fleetInfo.Status = FleetStatus.Ready;
+            fleetInfo.ImageId = imageName;
         }
         finally
         {
@@ -142,4 +145,15 @@ public class DockerImageBuilder : IImageBuilder
 
         await _infoContext.SaveChangesAsync(cancellationToken);
     }
+}
+
+public static class DockerfileFactory
+{
+    public static string GetLinuxDockerfile(IEnumerable<int> ports, string runtimePath, string launchParameters) => $@"
+            FROM mcr.microsoft.com/dotnet/runtime:7.0
+            {string.Join(Environment.NewLine, ports.Select(x => $"EXPOSE " + x))}
+            WORKDIR /app
+            COPY . .
+            ENTRYPOINT [""./{runtimePath}"", ""{launchParameters}""]
+        ";
 }

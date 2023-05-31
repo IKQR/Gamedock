@@ -5,11 +5,12 @@ namespace GameDock.Server.Mappers;
 
 public static class SessionInfoMapper
 {
-    public static SessionInfoDto Map(SessionInfo buildInfo) => new()
+    public static SessionInfoDto Map(SessionInfo sessionInfo) => new()
     {
-        Id = buildInfo.Id,
-        Port = buildInfo.Port,
-        BuildId = buildInfo.BuildId,
-        StartedAt = buildInfo.StartedAt,
+        Ip = "176.36.111.97",
+        Id = sessionInfo.ContainerId,
+        Ports = sessionInfo.Ports,
+        BuildId = sessionInfo.FleetId,
+        StartedAt = sessionInfo.StartedAt,
     };
 }
