@@ -1,4 +1,5 @@
 ﻿using GameDock.Server.Application.Services;
+using GameDock.Server.Domain.Enums;
 using GameDock.Server.Domain.Fleet;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -28,6 +29,11 @@ public class CreateFleetHandler : IRequestHandler<CreateFleetRequest, CreateFlee
         if (build is null)
         {
             return CreateFleetResponse.Failed("Build not found");
+        }
+
+        if (build.Status is not BuildStatus.Saved)
+        {
+            return CreateFleetResponse.Failed("Build not ready");
         }
 
         var newFleet = await _fleets.AddAsync(build.Id, request.Runtime, request.Ports, request.Parameters,

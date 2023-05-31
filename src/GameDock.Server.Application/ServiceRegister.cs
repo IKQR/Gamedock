@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
-using Docker.DotNet;
+using GameDock.Server.Application.Handlers;
 using Microsoft.Extensions.DependencyInjection;
+using Quartz;
 
 namespace GameDock.Server.Application;
 
@@ -8,6 +9,8 @@ public static class ServiceRegister
 {
     public static IServiceCollection RegisterApplication(this IServiceCollection services)
         => services
-            .AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()))
-            .AddSingleton<IDockerClient>(_ => new DockerClientConfiguration().CreateClient());
+            .AddQuartz(q => q.UseMicrosoftDependencyInjectionJobFactory())
+            .AddQuartzHostedService(q => q.WaitForJobsToComplete = true)
+            .AddSingleton(sp => sp.GetRequiredService<ISchedulerFactory>().GetScheduler().Result)
+            .AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 }

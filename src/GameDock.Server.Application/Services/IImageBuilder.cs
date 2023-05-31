@@ -2,6 +2,5 @@
 
 public interface IImageBuilder
 {
-    Task BuildImageFromArchive(Guid id, string runtimePath, string launchParameters,
-        CancellationToken cancellationToken = default);
+    Task BuildImageFromFleet(Guid fleetId, CancellationToken cancellationToken = default);
 }

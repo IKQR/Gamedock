@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using GameDock.Server.Application.Handlers;
 using GameDock.Server.Application.Handlers.Fleets;
 using GameDock.Server.Mappers;
 using GameDock.Shared.Dto;
@@ -18,7 +20,7 @@ public class FleetController : ControllerBase
     [HttpPost]
     [ProducesResponseType(typeof(FleetInfoDto), 200)]
     [ProducesResponseType(typeof(string), 400)]
-    public async Task<IActionResult> Index([FromServices] IMediator mediator, CancellationToken cancellationToken,
+    public async Task<IActionResult> Create([FromServices] IMediator mediator, CancellationToken cancellationToken,
         [FromBody] CreateFleetDto request)
     {
         var result = await mediator.Send(
@@ -32,5 +34,21 @@ public class FleetController : ControllerBase
         }
 
         return BadRequest(result.Error);
+    }
+
+    [HttpPost("{id:required}/build")]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(typeof(string), 400)]
+    public async Task<IActionResult> Build([FromServices] IMediator mediator, CancellationToken cancellationToken,
+        [FromRoute] string id)
+    {
+        if (!Guid.TryParse(id, out var guidId))
+        {
+            return BadRequest("Invalid fleet id format");
+        }
+
+        await mediator.Send(new StartImageBuildRequest(guidId), cancellationToken);
+
+        return Ok();
     }
 }

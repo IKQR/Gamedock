@@ -1,5 +1,4 @@
-﻿using System.Security.AccessControl;
-using GameDock.Server.Application.Services;
+﻿using GameDock.Server.Application.Services;
 using Microsoft.Extensions.Options;
 
 namespace GameDock.Server.Infrastructure.Repositories;
@@ -13,12 +12,12 @@ public class BuildFileRepository : IBuildFileRepository
         _directory = new DirectoryInfo(options.Value.Path);
     }
 
-    public Stream GetStream(string key, CancellationToken cancellationToken = default)
+    public ValueTask<Stream> GetStream(string key, CancellationToken cancellationToken = default)
     {
         var fileName = FileName(key);
         var file = _directory.GetFiles().FirstOrDefault(x => x.Name == fileName);
 
-        return file?.OpenRead();
+        return ValueTask.FromResult<Stream>(file?.OpenRead());
     }
 
     public async Task SaveAsync(string key, Stream content, CancellationToken cancellationToken = default)
