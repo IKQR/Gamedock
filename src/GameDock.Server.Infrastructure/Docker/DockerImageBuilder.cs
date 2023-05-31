@@ -40,10 +40,16 @@ public class DockerImageBuilder : IImageBuilder
         {
             var originalFile = buildInfo.Id.ToString();
             var tempFile = Path.Combine(Path.GetTempPath(), fleetId.ToString());
-            var dockerfile = DockerfileFactory
-                .GetLinuxDockerfile(fleetInfo.Ports, buildInfo.RuntimePath, fleetInfo.LaunchParameters);
+            var dockerfile = new DockerfileBuilder
+            {
+                Ports = fleetInfo.Ports,
+                RuntimeKey = fleetInfo.Runtime,
+                EntrypointFile = buildInfo.RuntimePath,
+                EnvironmentVariables = fleetInfo.Variables,
+                LaunchParameters = fleetInfo.LaunchParameters,
+            }.Build();
 
-            await PrepareSourceFile(originalFile, tempFile, dockerfile);
+            await PrepareSourceArchiveAsync(originalFile, tempFile, dockerfile);
             await using var source = File.OpenRead(tempFile);
 
             var imageName = $"game-server-{fleetId}:latest";
@@ -54,7 +60,7 @@ public class DockerImageBuilder : IImageBuilder
                 Tags = new List<string> { imageName },
             };
 
-            var buildProgress = new Progress<JSONMessage>((x) => HandleBuildProgress(fleetId, x));
+            var buildProgress = new Progress<JSONMessage>(x => HandleBuildProgress(fleetId, x));
 
             await _docker.Images.BuildImageFromDockerfileAsync(
                 buildParameters,
@@ -78,7 +84,7 @@ public class DockerImageBuilder : IImageBuilder
         _logger.LogInformation("Process {Id}: {@Message}", fleetId, message);
     }
 
-    private async ValueTask PrepareSourceFile(string originalPath, string tempFilePath,
+    private async ValueTask PrepareSourceArchiveAsync(string originalPath, string tempFilePath,
         string dockerfile)
     {
         await using var originalFile = await _files.GetStream(originalPath);
@@ -145,15 +151,4 @@ public class DockerImageBuilder : IImageBuilder
 
         await _infoContext.SaveChangesAsync(cancellationToken);
     }
-}
-
-public static class DockerfileFactory
-{
-    public static string GetLinuxDockerfile(IEnumerable<int> ports, string runtimePath, string launchParameters) => $@"
-            FROM mcr.microsoft.com/dotnet/runtime:7.0
-            {string.Join(Environment.NewLine, ports.Select(x => $"EXPOSE " + x))}
-            WORKDIR /app
-            COPY . .
-            ENTRYPOINT [""./{runtimePath}"", ""{launchParameters}""]
-        ";
 }

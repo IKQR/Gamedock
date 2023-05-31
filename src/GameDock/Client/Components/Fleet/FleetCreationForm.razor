@@ -1,0 +1,170 @@
+﻿@inject HttpClient Http
+@inject NavigationManager NavigationManager
+
+<EditForm Model="_fleetModel" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator/>
+    <ValidationSummary/>
+    <div class="row">
+        <div class="form-group col-md mt-2">
+            <label>Build:</label>
+            <InputSelect class="form-select form-control" @bind-Value="_fleetModel.BuildId" required>
+                @foreach (var build in _builds)
+                {
+                    <option value="@build.Id">@build.Name:@build.Version</option>
+                }
+            </InputSelect>
+        </div>
+
+        <div class="form-group col-md mt-2">
+            <label>Runtime:</label>
+            <InputSelect class="form-select form-control" @bind-Value="_fleetModel.Runtime" required>
+                @foreach (var runtime in _runtimes)
+                {
+                    <option value="@runtime.Key">@runtime.Value</option>
+                }
+            </InputSelect>
+        </div>
+        <div class="form-group col-md mt-2">
+            <label>Launch Parameters:</label>
+            <InputText class="form-control" @bind-Value="_fleetModel.LaunchParameters"/>
+        </div>
+
+    </div>
+    <div class="row mt-4">
+        <div class="col-md-4">
+            <div class="form-group">
+                <label>Ports:</label>
+                <button class="btn btn-sm btn-outline-primary" @onclick="@AddPort">
+                    <i class="bi bi-plus"></i>
+                </button>
+                @foreach (var port in _fleetModel.Ports)
+                {
+                    <div class="input-group mb-3 mt-3">
+                        <InputNumber class="form-control" @bind-Value="port.Value" min="0"/>
+                        <button class="btn btn-outline-danger" type="button" @onclick="@(() => RemovePort(port.Id))">
+                            <i class="bi bi-trash-fill"></i>
+                        </button>
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="form-group">
+                <label>Vars:</label>
+                <button class="btn btn-sm btn-outline-primary" @onclick="@AddVariable">
+                    <i class="bi bi-plus"></i>
+                </button>
+                @foreach (var variable in _fleetModel.Variables)
+                {
+                    <div class="input-group mb-3 mt-3">
+                        <InputText class="form-control  text-end" @bind-Value="variable.Key"/>
+                        <span class="input-group-text">=</span>
+                        <InputText class="form-control" @bind-Value="variable.Value"/>
+                        <button class="btn btn-outline-danger" type="button" @onclick="@(() => RemoveVariable(variable.Id))">
+                            <i class="bi bi-trash-fill"></i>
+                        </button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    @if (!string.IsNullOrEmpty(_errors))
+    {
+        <div class="alert alert-danger" role="alert">
+            @_errors
+        </div>
+    }
+
+    <button type="submit" class="btn btn-primary mt-2" @onclick="@(() => _readyForSubmit = true)">Create</button>
+</EditForm>
+
+@code {
+    private bool _readyForSubmit = false;
+    private string _errors = "";
+    private IDictionary<string, string> _runtimes = new Dictionary<string, string>();
+    private IEnumerable<BuildInfoDto> _builds = Array.Empty<BuildInfoDto>();
+    private readonly FleetModel _fleetModel = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var builds = await Http.GetFromJsonAsync<BuildInfoDto[]>("/api/build/info");
+
+        _builds = builds.OrderBy(x => x.Name).ThenBy(x => x.Version);
+
+        _runtimes = new Dictionary<string, string>
+        {
+            { "ubuntu", "Ubuntu 22.04" },
+            { "dotnet", "Microsoft .NET Core linux" },
+            { "python", "Python linux based" },
+            { "golang", "Golang unix" },
+        };
+    }
+
+    private void AddPort()
+    {
+        _fleetModel.Ports.Add(new Port());
+        _readyForSubmit = false;
+    }
+
+    private void RemovePort(string id) => _fleetModel.Ports.Remove(_fleetModel.Ports.First(x => x.Id == id));
+
+    private void AddVariable()
+    {
+        _fleetModel.Variables.Add(new EnvValue());
+        _readyForSubmit = false;
+    }
+
+    private void RemoveVariable(string id) => _fleetModel.Variables.Remove(_fleetModel.Variables.First(x => x.Id == id));
+
+    private async Task HandleValidSubmit()
+    {
+        if (!_readyForSubmit) return;
+
+        var ports = _fleetModel.Ports.Where(x => x.Value is not null && x.Value > 0).Select(x => (int)x.Value).ToHashSet();
+        var vars = _fleetModel.Variables.Where(x => x.Key is not null).ToDictionary(x => x.Key, x => x.Value);
+
+        var request = new CreateFleetDto
+        {
+            LaunchParameters = _fleetModel.LaunchParameters,
+            BuildId = Guid.Parse(_fleetModel.BuildId ?? _builds.First().Id),
+            Runtime = _fleetModel.Runtime ?? _runtimes.First().Key,
+            Ports = ports.ToArray(),
+            Variables = vars,
+        };
+
+        var result = await Http.PostAsJsonAsync("api/fleet", request);
+
+        if (result.IsSuccessStatusCode)
+        {
+            NavigationManager.NavigateTo("/fleets");
+        }
+        else
+        {
+            _errors = await result.Content.ReadAsStringAsync();
+        }
+    }
+
+    private class FleetModel
+    {
+        public string BuildId { get; set; }
+        public string Runtime { get; set; }
+        public string LaunchParameters { get; set; }
+        public IList<Port> Ports { get; set; } = new List<Port>() { new() };
+        public IList<EnvValue> Variables { get; set; } = new List<EnvValue>() { new() };
+    }
+
+    private class Port
+    {
+        public string Id { get; } = Guid.NewGuid().ToString();
+        public int? Value { get; set; }
+    }
+
+
+    private class EnvValue
+    {
+        public string Id { get; } = Guid.NewGuid().ToString();
+        public string Key { get; set; }
+        public string Value { get; set; }
+    }
+
+}

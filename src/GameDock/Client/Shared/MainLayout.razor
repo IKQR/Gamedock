@@ -1,5 +1,4 @@
 ﻿@inherits LayoutComponentBase
-@inject NavigationManager NavigationManager
 
 <AuthorizeView>
     <NotAuthorized>
@@ -19,11 +18,9 @@
 
             <main>
                 <div class="top-row px-4">
-                    <form @onsubmit="Logout">
-                        <button type="submit" class="nav-link btn btn-link text-dark">
-                            Logout (@context.User.Identity!.Name)
-                        </button>
-                    </form>
+                    <NavLink href="/auth/logout" type="submit" class="nav-link btn btn-link text-dark">
+                        Logout (@context.User.Identity!.Name)
+                    </NavLink>
                 </div>
 
                 <article class="content px-4">
@@ -35,8 +32,4 @@
 </AuthorizeView>
 
 @code{
-    private void Logout()
-    {
-        NavigationManager.NavigateTo("/auth/logout");
-    }
 }
