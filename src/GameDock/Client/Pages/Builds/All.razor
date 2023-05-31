@@ -1,5 +1,37 @@
 ﻿@page "/builds"
+@using GameDock.Shared.Dto
+@attribute [Authorize]
+@inject HttpClient Http
 
-<h1>All Builds</h1>
 
-<BuildsList />
+<div class="row">
+    <div class="col">
+        <h3>List of uploaded builds:</h3>
+    </div>
+    <div class="col">
+        <div class="float-end">
+            <div class="col-md-1">
+                <RefreshButton OnRefresh="RefreshAsync"/>
+            </div>
+        </div>
+    </div>
+</div>
+<div>
+    <BuildsListView Builds="_builds"/>
+</div>
+
+@code{
+    private BuildInfoDto[] _builds;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await RefreshAsync();
+    }
+
+    private async Task RefreshAsync()
+    {
+        var builds = await Http.GetFromJsonAsync<BuildInfoDto[]>("/api/build/info");
+
+        _builds = builds.OrderByDescending(x => x.CreatedAt).ToArray();
+    }
+}
