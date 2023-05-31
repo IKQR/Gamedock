@@ -5,14 +5,17 @@
 
 
 <div class="row">
-    <div class="col">
+    <div class="col-auto">
         <h3>List of uploaded builds:</h3>
+    </div>
+    <div class="col-auto">
+        <NavLink class="btn btn-sm btn-primary" href="/builds/upload">
+            <i class="bi bi-upload"></i>&nbsp;Upload new
+        </NavLink>
     </div>
     <div class="col">
         <div class="float-end">
-            <div class="col-md-1">
-                <RefreshButton OnRefresh="RefreshAsync"/>
-            </div>
+            <RefreshButton OnRefresh="RefreshAsync"/>
         </div>
     </div>
 </div>
@@ -34,4 +37,5 @@
 
         _builds = builds.OrderByDescending(x => x.CreatedAt).ToArray();
     }
+
 }

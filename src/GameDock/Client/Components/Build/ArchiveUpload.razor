@@ -26,9 +26,14 @@
         </div>
     </div>
 
-    <button type="submit" class="btn btn-primary mt-2">Upload</button>
-
-    <div class="progress mt-3">
-        <div class="progress-bar" role="progressbar" style="width: @_progressPercentage%;" aria-valuenow="@_progressPercentage" aria-valuemin="0" aria-valuemax="100">@_progressPercentage%</div>
+    <div class="row">
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary mt-2">Upload</button>
+        </div>
+        <div class="col-md">
+            <div class="progress mt-3">
+                <div class="progress-bar" role="progressbar" style="width: @_progressPercentage%;" aria-valuenow="@_progressPercentage" aria-valuemin="0" aria-valuemax="100">@_progressPercentage%</div>
+            </div>
+        </div>
     </div>
 </EditForm>

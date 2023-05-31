@@ -1,0 +1,41 @@
+﻿@using GameDock.Shared.Dto
+
+@if (Fleets is not null)
+{
+    <table class="table table-striped">
+        <thead class="thead-dark">
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Build ID</th>
+            <th scope="col">Runtime</th>
+            <th scope="col">Status</th>
+            <th scope="col">Created At</th>
+            <th scope="col">Updated At</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var fleet in Fleets)
+        {
+            <tr>
+                <td>
+                    <NavLink href="@($"/fleets/{fleet.Id}")"> @fleet.Id</NavLink>
+                </td>
+                <td>
+                    <NavLink href="@($"/builds/{fleet.BuildId}")"> @fleet.BuildId</NavLink>
+                </td>
+                <td>@fleet.Runtime</td>
+                <td>@fleet.Status</td>
+                <td>@fleet.CreatedAt</td>
+                <td>@fleet.UpdatedAt</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+
+@code {
+
+    [Parameter]
+    public FleetInfoDto[] Fleets { get; set; }
+
+}

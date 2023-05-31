@@ -1,9 +1,23 @@
 ﻿@page "/builds/upload"
 @attribute [Authorize]
 
-<h1> Upload Archive </h1>
+<div class="row">
+    <div class="col-md">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <NavLink href="/builds">Builds</NavLink>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">upload new</li>
+            </ol>
+        </nav>
+    </div>
+</div>
 
-<ArchiveUpload/>
+<h3> Upload new build: </h3>
+<div class="mt-3">
+    <ArchiveUpload/>
+</div>
 
 @code {
 
