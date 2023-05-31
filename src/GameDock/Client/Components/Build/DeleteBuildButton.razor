@@ -1,0 +1,40 @@
+﻿@inject IJSRuntime Js
+@inject HttpClient Http
+@inject NavigationManager Navigation
+
+<button class="btn btn-danger" @onclick="DeleteAsync">
+    Delete
+</button>
+
+@code {
+
+    [Parameter]
+    public string BuildId { get; set; }
+
+    [Parameter]
+    public EventCallback<bool> OnRequestProcessed { get; set; }
+
+    private async Task DeleteAsync()
+    {
+        var sure = await Js.InvokeAsync<bool>("confirm", $"Are you sure you want to delete this build ?");
+
+        if (!sure) return;
+
+        try
+        {
+            var result = await Http.DeleteAsync($"/api/build/{BuildId}");
+
+            if (!result.IsSuccessStatusCode)
+            {
+                await Js.InvokeVoidAsync("alert", "Couldn't delete build.");
+            }
+            
+            await OnRequestProcessed.InvokeAsync(result.IsSuccessStatusCode);
+        }
+        catch (Exception)
+        {
+            await Js.InvokeVoidAsync("alert", "There was an error on build delete");
+            Navigation.NavigateTo(Navigation.Uri, true);
+        }
+    }
+}

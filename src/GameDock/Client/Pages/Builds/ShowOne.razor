@@ -1,6 +1,6 @@
 ﻿@page "/builds/{id}"
 @using GameDock.Shared.Dto
-
+@attribute [Authorize]
 @inject HttpClient HttpClient
 @inject NavigationManager NavigationManager
 
@@ -9,17 +9,11 @@
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
-                    <a href="/builds">Builds</a>
+                    <NavLink href="/builds">Builds</NavLink>
                 </li>
                 <li class="breadcrumb-item active" aria-current="page">@Id</li>
             </ol>
-
         </nav>
-    </div>
-    <div class="col-md-1">
-        <button class="btn btn-secondary btn-sm" @onclick="RefreshPage">
-            <i class="bi bi-arrow-repeat"></i>
-        </button>
     </div>
 </div>
 
@@ -29,7 +23,29 @@
 }
 else if (_buildInfo != null)
 {
-    <BuildInfoView BuildInfo="_buildInfo" />
+    <div class="row">
+        <div class="col">
+            <h3>Build information:</h3>
+        </div>
+        <div class="col">
+            <div class="float-end">
+                <div class="col-md-1">
+                    <button @onclick="RefreshAsync" class="btn @(_isRefreshing is null ? "btn-link text-dark" : _isRefreshing == true ? "btn-primary text-white" : "btn-success text-white")">
+                        <i class="bi bi-arrow-repeat"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="">
+        <BuildInfoView BuildInfo="_buildInfo"/>
+    </div>
+    <div class="mt-2">
+        @if (_buildInfo.Status != "Deleted")
+        {
+            <DeleteBuildButton BuildId="_buildInfo" OnRequestProcessed="OnDelete"/>
+        }
+    </div>
 }
 else
 {
@@ -43,6 +59,7 @@ else
 
     private BuildInfoDto _buildInfo;
     private bool _isLoading = true;
+    private bool? _isRefreshing = null;
 
     protected override async Task OnInitializedAsync()
     {
@@ -50,12 +67,28 @@ else
         _isLoading = false;
     }
 
-    private async Task RefreshPage()
+    private async Task RefreshAsync()
     {
-        _isLoading = true;
+        _isRefreshing = true;
         StateHasChanged();
 
         _buildInfo = await HttpClient.GetFromJsonAsync<BuildInfoDto>($"/api/build/info/{Id}");
-        _isLoading = false;
+
+        _isRefreshing = false;
+        StateHasChanged();
+
+        await Task.Delay(3000);
+        _isRefreshing = null;
+    }
+
+    private async Task OnDelete(bool success)
+    {
+        if (!success)
+        {
+            await RefreshAsync();
+            return;
+        }
+        
+        NavigationManager.NavigateTo("/builds", false);
     }
 }

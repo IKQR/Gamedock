@@ -1,9 +1,8 @@
 ﻿@using GameDock.Shared.Dto
-<h3>BuildInfoView</h3>
 
 <div class="card">
         <div class="card-body">
-            <h5 class="card-title">Name: @BuildInfo.Name</h5>
+            <p class="card-text">Name: @BuildInfo.Name</p>
             <p class="card-text">Version: @BuildInfo.Version</p>
             <p class="card-text">
                 Status:&nbsp;
@@ -20,7 +19,9 @@
                         break;
                 }
             </p>
-            <p class="card-text">Created At: @BuildInfo.CreatedAt.ToLocalTime().ToString("G")</p>
+            <p class="card-text">
+                Upload date: @BuildInfo.CreatedAt.ToLocalTime().ToString("G")
+            </p>
         </div>
     </div>
 

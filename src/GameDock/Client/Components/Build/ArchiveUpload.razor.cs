@@ -3,17 +3,13 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
-using System.Text.Json;
 using System.Threading.Tasks;
 using GameDock.Shared;
 using GameDock.Shared.Dto;
-using GameDock.Shared.Responses;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.JSInterop;
-using TusDotNetClient;
 
-namespace GameDock.Client.Components;
+namespace GameDock.Client.Components.Build;
 
 public partial class ArchiveUpload : ComponentBase
 {
