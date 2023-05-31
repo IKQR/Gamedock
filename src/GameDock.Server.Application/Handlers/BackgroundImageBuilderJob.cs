@@ -20,10 +20,10 @@ public class BackgroundImageBuilderJob : IJob
         var cancellationToken = context.CancellationToken;
         var fleetId = context.JobDetail.JobDataMap.GetGuidValue("fleetId");
         
+        _logger.LogInformation("Build image process started. FleetId: '{Id}'", fleetId);
+
         try
         {
-            _logger.LogInformation("Build image process started. FleetId: '{Id}'", fleetId);
-
             await _imageBuilder.BuildImageFromFleet(fleetId, cancellationToken);
 
             _logger.LogInformation("Fleet image ready. FleetId: '{Id}'", fleetId);

@@ -44,7 +44,7 @@ public class DockerImageBuilder : IImageBuilder
                 .GetLinuxDockerfile(fleetInfo.Ports, buildInfo.RuntimePath, fleetInfo.LaunchParameters);
 
             await PrepareSourceFile(originalFile, tempFile, dockerfile);
-            var source = File.OpenRead(tempFile);
+            await using var source = File.OpenRead(tempFile);
 
             var imageName = $"game-server-{fleetId}:latest";
 
