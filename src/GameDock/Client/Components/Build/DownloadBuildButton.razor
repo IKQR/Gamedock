@@ -1,0 +1,17 @@
+﻿@inject IJSRuntime Js
+
+<button class="btn btn-primary" @onclick="DownloadASync">
+    <i class="bi bi-download"></i>&nbsp;Download
+</button>
+
+@code {
+
+    [Parameter]
+    public string BuildId { get; set; }
+
+    private async Task DownloadASync()
+    {
+        await Js.InvokeVoidAsync("downloadFile", $"/api/build/{BuildId}/download");
+    }
+
+}

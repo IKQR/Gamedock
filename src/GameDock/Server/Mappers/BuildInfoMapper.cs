@@ -7,7 +7,7 @@ public static class BuildInfoMapper
 {
     public static BuildInfoDto Map(BuildInfo buildInfo) => new()
     {
-        Id = buildInfo.Id,
+        Id = buildInfo.Id.ToString(),
         Name = buildInfo.Name,
         Version = buildInfo.Version,
         Status = buildInfo.Status.ToString(),

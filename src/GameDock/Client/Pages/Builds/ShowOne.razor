@@ -30,9 +30,7 @@ else if (_buildInfo != null)
         <div class="col">
             <div class="float-end">
                 <div class="col-md-1">
-                    <button @onclick="RefreshAsync" class="btn @(_isRefreshing is null ? "btn-link text-dark" : _isRefreshing == true ? "btn-primary text-white" : "btn-success text-white")">
-                        <i class="bi bi-arrow-repeat"></i>
-                    </button>
+                    <RefreshButton OnRefresh="RefreshAsync"/>
                 </div>
             </div>
         </div>
@@ -41,10 +39,19 @@ else if (_buildInfo != null)
         <BuildInfoView BuildInfo="_buildInfo"/>
     </div>
     <div class="mt-2">
-        @if (_buildInfo.Status != "Deleted")
-        {
-            <DeleteBuildButton BuildId="_buildInfo" OnRequestProcessed="OnDelete"/>
-        }
+        <div class="row">
+            <div class="col-auto">
+                <DownloadBuildButton BuildId="@_buildInfo.Id"></DownloadBuildButton>
+            </div>
+            @if (_buildInfo.Status != "Deleted")
+            {
+                <div class="col-auto">
+                    <DeleteBuildButton BuildId="@_buildInfo.Id" OnRequestProcessed="OnDelete"/>
+                </div>
+            }
+
+            <div class="col-auto"></div>
+        </div>
     </div>
 }
 else
@@ -88,7 +95,8 @@ else
             await RefreshAsync();
             return;
         }
-        
+
         NavigationManager.NavigateTo("/builds", false);
     }
+
 }

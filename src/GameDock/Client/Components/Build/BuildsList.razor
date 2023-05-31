@@ -26,7 +26,7 @@ else
         {
             <tr>
                 <td>
-                    <a @onclick="@(e => NavigateToBuildDetail(build.Id))" class="text-primary">@build.Id</a>
+                    <NavLink href="@($"/builds/{build.Id}")"> @build.Id</NavLink>
                 </td>
                 <td>@build.Name</td>
                 <td>@build.Version</td>
@@ -45,10 +45,5 @@ else
     protected override async Task OnInitializedAsync()
     {
         _builds = await Http.GetFromJsonAsync<BuildInfoDto[]>("/api/build/info");
-    }
-
-    private void NavigateToBuildDetail(Guid id)
-    {
-        NavigationManager.NavigateTo($"/builds/{id}");
     }
 }

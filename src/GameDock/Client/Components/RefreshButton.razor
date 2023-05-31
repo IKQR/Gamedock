@@ -1,0 +1,31 @@
+﻿<button @onclick="RefreshAsync" class="btn @(_buttonStyle)">
+    <i class="bi bi-arrow-repeat"></i>
+</button>
+
+@code {
+
+    [Parameter]
+    public EventCallback OnRefresh { get; set; }
+
+    private string _buttonStyle = "btn-link text-dark";
+
+    private async Task RefreshAsync()
+    {
+        _buttonStyle = "btn-primary text-white";
+        StateHasChanged();
+
+        try
+        {
+            await OnRefresh.InvokeAsync();
+            _buttonStyle = "btn-success text-white";
+        }
+        catch (Exception)
+        {
+            _buttonStyle = "btn-danger text-white";
+        }
+        StateHasChanged();
+
+        await Task.Delay(2000);
+        _buttonStyle = "btn-link text-dark";
+    }
+}

@@ -4,7 +4,7 @@ namespace GameDock.Shared.Dto;
 
 public class BuildInfoDto
 {
-    public Guid Id { get; set; }
+    public string Id { get; set; }
     public string Name { get; set; }
     public string Version { get; set; }
     public string Status { get; set; }
