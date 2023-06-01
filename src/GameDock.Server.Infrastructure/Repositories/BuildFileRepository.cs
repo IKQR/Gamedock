@@ -35,7 +35,7 @@ public class BuildFileRepository : IBuildFileRepository
         await content.CopyToAsync(fileStream, cancellationToken);
     }
 
-    public async ValueTask<bool> TryDeleteAsync(string key, CancellationToken cancellationToken)
+    public ValueTask<bool> TryDeleteAsync(string key, CancellationToken cancellationToken)
     {
         try
         {
@@ -43,16 +43,16 @@ public class BuildFileRepository : IBuildFileRepository
 
             if (!File.Exists(fileName))
             {
-                return false;
+                return ValueTask.FromResult(false);
             }
 
             File.Delete(fileName);
 
-            return true;
+            return ValueTask.FromResult(true);
         }
         catch(Exception)
         {
-            return false;
+            return ValueTask.FromResult(false);
         }
     }
 

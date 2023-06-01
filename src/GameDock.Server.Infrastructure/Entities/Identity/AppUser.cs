@@ -2,7 +2,14 @@
 
 namespace GameDock.Server.Infrastructure.Entities.Identity;
 
-public class AppUser : IdentityUser
+public sealed class AppUser : IdentityUser
 {
-    
+    public AppUser() : base()
+    {
+    }
+
+    public AppUser(string userName) : base(userName)
+    {
+        NormalizedUserName = userName.ToUpperInvariant();
+    }
 }

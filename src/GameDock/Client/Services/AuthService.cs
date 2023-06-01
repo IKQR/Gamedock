@@ -46,7 +46,7 @@ public class AuthService
         };
     }
     
-    public async Task SignOutAsync()=> await _localStorage.RemoveItemAsync("authToken");
+    public async Task SignOutAsync()=> await _localStorage.RemoveTokenAsync();
     
 }
 

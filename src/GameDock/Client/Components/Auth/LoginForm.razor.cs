@@ -4,9 +4,9 @@ using GameDock.Client.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 
-namespace GameDock.Client.Pages.Auth;
+namespace GameDock.Client.Components.Auth;
 
-public partial class LogIn : ComponentBase
+public partial class LoginForm : ComponentBase
 {
     [Inject] AuthService AuthService { get; init; }
     [Inject] NavigationManager Navigation { get; init; }

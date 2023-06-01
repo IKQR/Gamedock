@@ -1,0 +1,23 @@
+﻿<EditForm Model="@_loginModel" OnValidSubmit="HandleLogin">
+    <DataAnnotationsValidator/>
+    <ValidationSummary/>
+
+    <div class="form-outline mb-4">
+        <label class="form-label" for="typeEmailX-2">Login</label>
+        <InputText id="typeEmailX-2" class="form-control form-control-lg" @bind-Value="_loginModel.Login"/>
+    </div>
+
+    <div class="form-outline mb-4">
+        <label class="form-label" for="typePasswordX-2">Password</label>
+        <InputText id="typePasswordX-2" class="form-control form-control-lg" type="password" @bind-Value="_loginModel.Password"/>
+    </div>
+
+    @if (!string.IsNullOrEmpty(_error))
+    {
+        <div class="alert alert-danger" role="alert">
+            @_error
+        </div>
+    }
+
+    <button class="btn btn-primary btn-lg btn-block" type="submit">Login</button>
+</EditForm>

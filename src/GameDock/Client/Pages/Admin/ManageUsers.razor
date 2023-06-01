@@ -1,0 +1,141 @@
+﻿@page "/admin/users"
+@attribute [Authorize(Roles = "Admin")]
+@inject IJSRuntime Js
+@inject HttpClient Http
+@using GameDock.Shared.Requests
+@using GameDock.Shared.Responses
+
+<h3>User Management</h3>
+
+@if (!string.IsNullOrEmpty(_errorMessage))
+{
+    <div class="alert alert-danger" role="alert">
+        @_errorMessage
+    </div>
+}
+
+<div class="mt-3 mb-2">
+    <EditForm Model="_newUser" OnValidSubmit="CreateUser">
+        <ValidationMessage For="@(() => _newUser.Login)"/>
+        <div class="row">
+            <div class="col-auto">
+                <InputText id="username" class="form-control" @bind-Value="_newUser.Login" placeholder="New user"/>
+            </div>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-success">Add new</button>
+            </div>
+        </div>
+    </EditForm>
+</div>
+
+<div class="table-responsive">
+    <table class="table">
+        <colgroup>
+            <col style="width: 40%"/>
+            <col style="width: 15%"/>
+            <col style="width: 15%"/>
+            <col style="width: 40%"/>
+        </colgroup>
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Login</th>
+            <th>Is Admin</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var user in _users)
+        {
+            <tr>
+                <td>@user.Id</td>
+                <td>@user.Login</td>
+                <td>@user.IsAdmin</td>
+                <td>
+                    <div class="btn-group" style="width:100%;">
+                        <button class="btn btn-primary w-100" @onclick=@(() => ToggleUserRole(user))>@(user.IsAdmin ? "Make User" : "Make Admin")</button>
+                        <button class="btn btn-danger w-100" @onclick=@(() => DeleteUser(user))>Delete</button>
+                        <button class="btn btn-warning w-100" @onclick=@(() => ResetPassword(user))>Reset Password</button>
+                    </div>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
+
+@code {
+    private List<AppUserDto> _users = new();
+    private CreateUserRequest _newUser = new();
+    private string _errorMessage = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _users = await Http.GetFromJsonAsync<List<AppUserDto>>("api/admin/user");
+    }
+
+    private async Task CreateUser()
+    {
+        var response = await Http.PostAsJsonAsync("api/admin/user", _newUser);
+
+        if (response.IsSuccessStatusCode)
+        {
+            var result = await response.Content.ReadFromJsonAsync<CreateUserResponse>();
+            _users.Add(new AppUserDto { Id = result.Id, Login = result.Login, IsAdmin = result.Roles.Contains("Admin") });
+            await Js.InvokeVoidAsync("alert", $"New user created. Username: {result.Login}, Password: {result.Password}");
+            _newUser = new CreateUserRequest();
+            _errorMessage = string.Empty;
+        }
+        else
+        {
+            _errorMessage = $"Failed to create user: {response.ReasonPhrase}";
+        }
+    }
+
+    private async Task ToggleUserRole(AppUserDto user)
+    {
+        var response = await Http.PutAsJsonAsync($"api/admin/user/{user.Id}", new UpdateUserRequest { IsAdmin = !user.IsAdmin });
+
+        if (response.IsSuccessStatusCode)
+        {
+            user.IsAdmin = (await Http.GetFromJsonAsync<AppUserDto>($"api/admin/user/{user.Id}")).IsAdmin;
+            _errorMessage = string.Empty;
+        }
+        else
+        {
+            _errorMessage = $"Failed to update user role: {response.ReasonPhrase}";
+        }
+    }
+
+    private async Task DeleteUser(AppUserDto user)
+    {
+        var response = await Http.DeleteAsync($"api/admin/user/{user.Id}");
+
+        if (response.IsSuccessStatusCode)
+        {
+            _users.Remove(user);
+            _errorMessage = string.Empty;
+        }
+        else
+        {
+            _errorMessage = $"Failed to delete user: {response.ReasonPhrase}";
+        }
+    }
+
+    private async Task ResetPassword(AppUserDto user)
+    {
+        var response = await Http.PostAsync($"api/admin/user/{user.Id}/reset", null);
+
+        if (response.IsSuccessStatusCode)
+        {
+            var result = await response.Content.ReadFromJsonAsync<CreateUserResponse>();
+            await Js.InvokeVoidAsync("alert", $"Password reset for user {result.Login}. New Password: {result.Password}");
+            _errorMessage = string.Empty;
+        }
+        else
+        {
+            _errorMessage = $"Failed to reset password: {response.ReasonPhrase}";
+        }
+    }
+
+}
