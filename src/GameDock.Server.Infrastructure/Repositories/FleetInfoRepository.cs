@@ -45,6 +45,19 @@ public class FleetInfoRepository : IFleetInfoRepository
         return entity is null ? null : FleetInfoMapper.Map(entity);
     }
 
+    public async Task<FleetInfo> SetImageAsync(Guid id, string image, CancellationToken cancellationToken = default)
+    {
+        var entity = await _context.FleetInfos.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+        if (entity is null) return null;
+
+        entity.ImageId = image;
+        entity.Status = FleetStatus.Ready;
+        _context.FleetInfos.Update(entity);
+        await _context.SaveChangesAsync(cancellationToken);
+
+        return FleetInfoMapper.Map(entity);
+    }
+
     public async Task<FleetInfo> SetStatusIfExistAsync(Guid id, FleetStatus status, CancellationToken cancellationToken)
     {
         var entity = await _context.FleetInfos.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);

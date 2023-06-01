@@ -24,4 +24,9 @@
     <ProjectReference Include="..\Shared\GameDock.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Components\Fleet\FleetCreationForm.razor" />
+    <_ContentIncludedByDefault Remove="Components\Fleet\FleetsListView.razor" />
+  </ItemGroup>
+
 </Project>

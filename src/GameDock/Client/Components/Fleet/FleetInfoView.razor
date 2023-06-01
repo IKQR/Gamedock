@@ -1,0 +1,34 @@
+﻿<div class="card">
+    <div class="card-body">
+        <p class="card-text">Status: @GetStatusText(FleetInfo.Status)</p>
+        <p class="card-text">Runtime: @FleetInfo.Runtime</p>
+        <p class="card-text">Ports: @string.Join(", ", FleetInfo.Ports)</p>
+        <p class="card-text">Launch Parameters: @FleetInfo.LaunchParameters</p>
+        <p class="card-text">Variables:</p>
+        <ul class="list-group">
+            @foreach (var variable in FleetInfo.Variables)
+            {
+                <li class="list-group-item">@variable.Key: @variable.Value</li>
+            }
+        </ul>
+        <p class="card-text">Created At: @FleetInfo.CreatedAt.ToLocalTime().ToString("G")</p>
+        <p class="card-text">Updated At: @FleetInfo.UpdatedAt.ToLocalTime().ToString("G")</p>
+    </div>
+</div>
+
+@code {
+
+    [Parameter]
+    public FleetInfoDto FleetInfo { get; set; }
+
+    private string GetStatusText(string status)
+    {
+        return status switch
+        {
+            "Deleted" => "<span class=\"text-danger\">Deleted</span>",
+            "Saved" => "<span class=\"text-success\">Saved</span>",
+            _ => "<span class=\"text-info\">Unknown</span>",
+        };
+    }
+
+}

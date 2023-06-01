@@ -9,6 +9,7 @@ public static class FleetInfoMapper
         new(
             Id: entity.Id,
             BuildId: entity.BuildId,
+            ImageKey: entity.ImageId,
             Runtime: entity.Runtime,
             Ports: entity.Ports,
             LaunchParameters: entity.LaunchParameters,

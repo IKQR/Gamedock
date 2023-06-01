@@ -10,7 +10,6 @@ public static class SessionInfoMapper
         Ip = "176.36.111.97",
         Id = sessionInfo.ContainerId,
         Ports = sessionInfo.Ports,
-        BuildId = sessionInfo.FleetId,
-        StartedAt = sessionInfo.StartedAt,
+        StartedAt = sessionInfo.CreatedAt,
     };
 }

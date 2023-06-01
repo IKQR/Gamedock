@@ -20,7 +20,7 @@ public static class ServiceRegister
         => services
             .AddScoped<IImageBuilder, DockerImageBuilder>()
             .AddSingleton<IDockerClient>(_ => new DockerClientConfiguration().CreateClient())
-            .AddScoped<ISessionRunner, DockerSessionRunner>();
+            .AddScoped<ISessionManager, DockerSessionManager>();
 
 
     private static IServiceCollection ConfigureDatabase(this IServiceCollection services, IConfiguration configuration)
@@ -30,5 +30,6 @@ public static class ServiceRegister
             .AddScoped<ITransactionManager, TransactionManager>()
             .AddScoped<IBuildInfoRepository, BuildInfoRepository>()
             .AddScoped<IBuildFileRepository, BuildFileRepository>()
-            .AddScoped<IFleetInfoRepository, FleetInfoRepository>();
+            .AddScoped<IFleetInfoRepository, FleetInfoRepository>()
+            .AddScoped<ISessionInfoRepository, SessionInfoRepository>();
 }

@@ -40,10 +40,10 @@ public class BuildFleetService : IBuildFleetService
             var build = info.Value.Item2;
             await using var source = info.Value.Item3;
 
-            await _imageBuilder.BuildImageFromFleet(fleetId.ToString(), source, fleet.Ports, fleet.Runtime, build.RuntimePath,
+            var image= await _imageBuilder.BuildImageFromFleet(fleetId.ToString(), source, fleet.Ports, fleet.Runtime, build.RuntimePath,
                 fleet.LaunchParameters, fleet.Variables, cancellationToken);
 
-            await _fleetInfos.SetStatusIfExistAsync(fleetId, FleetStatus.Ready, CancellationToken.None);
+            await _fleetInfos.SetImageAsync(fleetId, image, CancellationToken.None);
 
             return true;
         }

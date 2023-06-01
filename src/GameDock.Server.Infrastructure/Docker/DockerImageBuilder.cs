@@ -23,7 +23,7 @@ public class DockerImageBuilder : IImageBuilder
         _docker = docker;
     }
 
-    public async Task BuildImageFromFleet(string key, Stream sourceCode, int[] ports, string runtime,
+    public async Task<string> BuildImageFromFleet(string key, Stream sourceCode, int[] ports, string runtime,
         string entrypointFile, string launchParameters, IDictionary<string, string> environmentVariables,
         CancellationToken cancellationToken)
     {
@@ -37,14 +37,14 @@ public class DockerImageBuilder : IImageBuilder
             LaunchParameters = launchParameters,
             EnvironmentVariables = environmentVariables,
         }.Build();
-        
+
         try
         {
             await PrepareSourceArchiveAsync(sourceCode, tempFilePath, dockerfile);
 
             await using var source = File.OpenRead(tempFilePath);
 
-            var imageName = $"{key}:latest";
+            var imageName = $"game-server-{key}:latest";
 
             var buildParameters = new ImageBuildParameters
             {
@@ -61,6 +61,20 @@ public class DockerImageBuilder : IImageBuilder
                 null,
                 buildProgress,
                 cancellationToken);
+
+            var images = await _docker.Images.ListImagesAsync(new ImagesListParameters
+            {
+                All = true,
+                Filters = new Dictionary<string, IDictionary<string, bool>>()
+                {
+                    ["reference"] = new Dictionary<string, bool>()
+                    {
+                        [imageName] = true,
+                    },
+                },
+            }, CancellationToken.None);
+
+            return images.Single().ID;
         }
         finally
         {

@@ -9,15 +9,17 @@ namespace GameDock.Server.Application.Handlers.Sessions;
 public class RunSessionHandler : IRequestHandler<RunSessionRequest, RunSessionResponse>
 {
     private readonly ILogger _logger;
-    private readonly ISessionRunner _sessionRunner;
+    private readonly ISessionManager _sessionManager;
     private readonly IFleetInfoRepository _fleetInfoRepository;
+    private readonly ISessionInfoRepository _sessionInfoRepository;
 
-    public RunSessionHandler(ILogger<RunSessionHandler> logger, ISessionRunner sessionRunner,
-        IFleetInfoRepository fleetInfoRepository)
+    public RunSessionHandler(ILogger<RunSessionHandler> logger, ISessionManager sessionManager,
+        IFleetInfoRepository fleetInfoRepository, ISessionInfoRepository sessionInfoRepository)
     {
         _logger = logger;
-        _sessionRunner = sessionRunner;
+        _sessionManager = sessionManager;
         _fleetInfoRepository = fleetInfoRepository;
+        _sessionInfoRepository = sessionInfoRepository;
     }
 
     public async Task<RunSessionResponse> Handle(RunSessionRequest request, CancellationToken cancellationToken)
@@ -36,7 +38,9 @@ public class RunSessionHandler : IRequestHandler<RunSessionRequest, RunSessionRe
             return new RunSessionResponse(false, Error: "Fleet not ready");
         }
 
-        var session = await _sessionRunner.RunSessionOnFleetAsync(fleet, cancellationToken);
+        var session = await _sessionManager.RunAsync(fleet.ImageKey, fleet.Ports, cancellationToken);
+
+        await _sessionInfoRepository.SetAsync(session, CancellationToken.None);
 
         _logger.LogInformation("Session successfully run. Session: '{SessionId}'", session.ContainerId);
 

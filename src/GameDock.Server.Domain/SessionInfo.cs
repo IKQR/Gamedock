@@ -1,3 +1,5 @@
-﻿namespace GameDock.Server.Domain;
+﻿using GameDock.Server.Domain.Enums;
 
-public record SessionInfo(string ContainerId, Guid FleetId, int[] Ports, DateTime StartedAt, DateTime? StoppedAt = null);
+namespace GameDock.Server.Domain;
+
+public record SessionInfo(string ContainerId, string ImageId, int[] Ports, SessionStatus Status, DateTime CreatedAt, DateTime? UpdatedAt = null);

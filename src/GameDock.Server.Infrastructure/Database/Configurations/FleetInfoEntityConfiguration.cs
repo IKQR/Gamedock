@@ -23,6 +23,10 @@ public class FleetInfoEntityConfiguration : IEntityTypeConfiguration<FleetInfoEn
 
         builder.Property(x => x.Runtime).IsRequired()
             .HasAnnotation("MinLength", 1);
+        
+        builder.Property(x => x.ImageId)
+            .IsRequired(false)
+            .HasAnnotation("MinLength", 1);
 
         builder.Property(x => x.LaunchParameters)
             .IsRequired(false)

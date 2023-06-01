@@ -1,0 +1,90 @@
+﻿@page "/fleets/{id}"
+@attribute [Authorize]
+@inject HttpClient HttpClient
+@inject NavigationManager NavigationManager
+
+<div class="row">
+    <div class="col-md">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <NavLink href="/builds">Builds</NavLink>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">@Id</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+@if (_isLoading)
+{
+    <p>Loading...</p>
+}
+else if (_buildInfo != null)
+{
+    <div class="row">
+        <div class="col">
+            <h3>Build information:</h3>
+        </div>
+        <div class="col">
+            <div class="float-end">
+                <div class="col-md-1">
+                    <RefreshButton OnRefresh="RefreshAsync"/>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="">
+        <BuildInfoView BuildInfo="_buildInfo"/>
+    </div>
+    <div class="mt-2">
+        <div class="row">
+            <div class="col-auto">
+                <DownloadBuildButton BuildId="@_buildInfo.Id"></DownloadBuildButton>
+            </div>
+            @if (_buildInfo.Status != "Deleted")
+            {
+                <div class="col-auto">
+                    <DeleteBuildButton BuildId="@_buildInfo.Id" OnRequestProcessed="OnDelete"/>
+                </div>
+            }
+
+            <div class="col-auto"></div>
+        </div>
+    </div>
+}
+else
+{
+    <p>Build Info not found.</p>
+}
+
+@code {
+
+    [Parameter]
+    public string Id { get; set; }
+
+    private BuildInfoDto _buildInfo;
+    private bool _isLoading = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await RefreshAsync();
+        _isLoading = false;
+    }
+
+    private async Task RefreshAsync()
+    {
+        _buildInfo = await HttpClient.GetFromJsonAsync<BuildInfoDto>($"/api/build/info/{Id}");
+    }
+
+    private async Task OnDelete(bool success)
+    {
+        if (!success)
+        {
+            await RefreshAsync();
+            return;
+        }
+
+        NavigationManager.NavigateTo("/builds", false);
+    }
+}
