@@ -14,7 +14,6 @@ public static class FleetInfoMapper
         LaunchParameters = domain.LaunchParameters,
         Variables = domain.Variables,
         Status = domain.Status.ToString(),
-        ImageId = domain.ImageId,
         CreatedAt = domain.CreatedAt,
         UpdatedAt = domain.UpdatedAt,
     };

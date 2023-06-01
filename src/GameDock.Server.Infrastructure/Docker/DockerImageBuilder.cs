@@ -29,7 +29,7 @@ public class DockerImageBuilder : IImageBuilder
     {
         var tempFilePath = Path.Combine(Path.GetTempPath(), key);
 
-        var dockerfile = new DockerfileBuilder
+        var dockerfile = new DockerConfigurationBuilder
         {
             Ports = ports,
             RuntimeKey = runtime,

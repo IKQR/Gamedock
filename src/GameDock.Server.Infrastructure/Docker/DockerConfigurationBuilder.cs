@@ -2,7 +2,7 @@
 
 namespace GameDock.Server.Infrastructure.Docker;
 
-public class DockerfileBuilder
+public class DockerConfigurationBuilder
 {
     public int[] Ports { get; set; }
     public string RuntimeKey { get; set; }

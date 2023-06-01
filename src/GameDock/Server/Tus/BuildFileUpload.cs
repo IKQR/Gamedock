@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Threading.Tasks;
 using GameDock.Server.Application.Handlers;
 using GameDock.Server.Domain.Enums;
 using GameDock.Server.Utils;
@@ -10,6 +11,7 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using tusdotnet;
 using tusdotnet.Interfaces;
+using tusdotnet.Models;
 using tusdotnet.Models.Expiration;
 
 namespace GameDock.Server.TUS;
@@ -17,7 +19,7 @@ namespace GameDock.Server.TUS;
 public static class BuildFileUpload
 {
     public static IEndpointConventionBuilder MapBuildUpload(this IEndpointRouteBuilder builder) =>
-        builder.MapTus("/api/build/upload", async _ => new()
+        builder.MapTus("/api/build/upload", _ => Task.FromResult<DefaultTusConfiguration>(new()
         {
             MaxAllowedUploadSizeInBytesLong = long.MaxValue,
             Store = new tusdotnet.Stores.TusDiskStore(Path.GetTempPath()),
@@ -58,5 +60,5 @@ public static class BuildFileUpload
                     }
                 },
             },
-        });
+        }));
 }
