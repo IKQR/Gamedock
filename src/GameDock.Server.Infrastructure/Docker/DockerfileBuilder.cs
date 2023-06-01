@@ -36,7 +36,7 @@ public class DockerfileBuilder
     
     private static readonly Dictionary<string, string> Runtimes = new()
     {
-        ["go"] = "golang:latest",
+        ["golang"] = "golang:latest",
         ["ubuntu"] = "ubuntu:latest",
         ["python"] = "python:latest",
         ["dotnet"] = "mcr.microsoft.com/dotnet/runtime:latest",

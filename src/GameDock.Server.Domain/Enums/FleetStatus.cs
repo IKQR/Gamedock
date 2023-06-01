@@ -6,4 +6,5 @@ public enum FleetStatus
     Pending,
     Failed,
     Ready,
+    Dead,
 }

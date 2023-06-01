@@ -10,6 +10,7 @@ public static class BuildInfoMapper
             Id: entity.Id,
             Name: entity.Name,
             Version: entity.Version,
+            RuntimePath: entity.RuntimePath,
             Status: entity.Status,
             CreatedAt: entity.CreatedAt,
             UpdatedAt: entity.UpdatedAt);

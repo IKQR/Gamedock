@@ -14,7 +14,6 @@ public static class FleetInfoMapper
             LaunchParameters: entity.LaunchParameters,
             Variables: entity.Variables,
             Status: entity.Status,
-            ImageId: entity.ImageId,
             CreatedAt: entity.CreatedAt,
             UpdatedAt: entity.UpdatedAt);
 }

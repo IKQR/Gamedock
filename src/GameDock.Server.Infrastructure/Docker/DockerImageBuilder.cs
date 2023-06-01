@@ -2,10 +2,6 @@
 using Docker.DotNet;
 using Docker.DotNet.Models;
 using GameDock.Server.Application.Services;
-using GameDock.Server.Domain.Enums;
-using GameDock.Server.Infrastructure.Database;
-using GameDock.Server.Infrastructure.Entities;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using SharpCompress.Archives.Tar;
 using SharpCompress.Common;
@@ -20,39 +16,35 @@ public class DockerImageBuilder : IImageBuilder
 
     private readonly ILogger _logger;
     private readonly IDockerClient _docker;
-    private readonly InfoDbContext _infoContext;
-    private readonly IBuildFileRepository _files;
 
-    public DockerImageBuilder(ILogger<DockerImageBuilder> logger, IDockerClient docker, InfoDbContext infoContext,
-        IBuildFileRepository files)
+    public DockerImageBuilder(ILogger<DockerImageBuilder> logger, IDockerClient docker)
     {
-        _files = files;
         _logger = logger;
         _docker = docker;
-        _infoContext = infoContext;
     }
 
-    public async Task BuildImageFromFleet(Guid fleetId, CancellationToken cancellationToken = default)
+    public async Task BuildImageFromFleet(string key, Stream sourceCode, int[] ports, string runtime,
+        string entrypointFile, string launchParameters, IDictionary<string, string> environmentVariables,
+        CancellationToken cancellationToken)
     {
-        var (fleetInfo, buildInfo) = await GetLockedFleet(fleetId, cancellationToken);
+        var tempFilePath = Path.Combine(Path.GetTempPath(), key);
 
+        var dockerfile = new DockerfileBuilder
+        {
+            Ports = ports,
+            RuntimeKey = runtime,
+            EntrypointFile = entrypointFile,
+            LaunchParameters = launchParameters,
+            EnvironmentVariables = environmentVariables,
+        }.Build();
+        
         try
         {
-            var originalFile = buildInfo.Id.ToString();
-            var tempFile = Path.Combine(Path.GetTempPath(), fleetId.ToString());
-            var dockerfile = new DockerfileBuilder
-            {
-                Ports = fleetInfo.Ports,
-                RuntimeKey = fleetInfo.Runtime,
-                EntrypointFile = buildInfo.RuntimePath,
-                EnvironmentVariables = fleetInfo.Variables,
-                LaunchParameters = fleetInfo.LaunchParameters,
-            }.Build();
+            await PrepareSourceArchiveAsync(sourceCode, tempFilePath, dockerfile);
 
-            await PrepareSourceArchiveAsync(originalFile, tempFile, dockerfile);
-            await using var source = File.OpenRead(tempFile);
+            await using var source = File.OpenRead(tempFilePath);
 
-            var imageName = $"game-server-{fleetId}:latest";
+            var imageName = $"{key}:latest";
 
             var buildParameters = new ImageBuildParameters
             {
@@ -60,7 +52,7 @@ public class DockerImageBuilder : IImageBuilder
                 Tags = new List<string> { imageName },
             };
 
-            var buildProgress = new Progress<JSONMessage>(x => HandleBuildProgress(fleetId, x));
+            var buildProgress = new Progress<JSONMessage>(x => HandleBuildProgress(key, x));
 
             await _docker.Images.BuildImageFromDockerfileAsync(
                 buildParameters,
@@ -69,27 +61,21 @@ public class DockerImageBuilder : IImageBuilder
                 null,
                 buildProgress,
                 cancellationToken);
-
-            fleetInfo.Status = FleetStatus.Ready;
-            fleetInfo.ImageId = imageName;
         }
         finally
         {
-            await UnlockFleet(fleetInfo, CancellationToken.None);
+            if (File.Exists(tempFilePath)) File.Delete(tempFilePath);
         }
     }
 
-    private void HandleBuildProgress(Guid fleetId, JSONMessage message)
+    private void HandleBuildProgress(string key, JSONMessage message)
     {
-        _logger.LogInformation("Process {Id}: {@Message}", fleetId, message);
+        _logger.LogInformation("Process {Id}: {@Message}", key, message);
     }
 
-    private async ValueTask PrepareSourceArchiveAsync(string originalPath, string tempFilePath,
-        string dockerfile)
+    private async ValueTask PrepareSourceArchiveAsync(Stream original, string tempFilePath, string dockerfile)
     {
-        await using var originalFile = await _files.GetStream(originalPath);
-
-        using var inputArchive = TarArchive.Open(originalFile);
+        using var inputArchive = TarArchive.Open(original);
 
         await using var resultStream = File.Create(tempFilePath);
 
@@ -107,48 +93,5 @@ public class DockerImageBuilder : IImageBuilder
 
         using var dockerfileStream = new MemoryStream(Encoding.UTF8.GetBytes(dockerfile));
         tarWriter.Write(Dockerfile, dockerfileStream);
-    }
-
-    private async Task<(FleetInfoEntity, BuildInfoEntity)> GetLockedFleet(Guid fleetId,
-        CancellationToken cancellationToken)
-    {
-        var fleetInfo = _infoContext.FleetInfos.FirstOrDefault(f => f.Id == fleetId);
-
-        if (fleetInfo is null)
-        {
-            throw new KeyNotFoundException($"Fleet '{fleetId}' not found.");
-        }
-
-        if (fleetInfo.Status is FleetStatus.Pending)
-        {
-            throw new InvalidOperationException($"Fleet '{fleetId}' is in Pending sate");
-        }
-
-        fleetInfo.Status = FleetStatus.Pending;
-        _infoContext.Update(fleetInfo);
-        await _infoContext.SaveChangesAsync(cancellationToken);
-
-        var buildInfo = await _infoContext.BuildInfos.FirstOrDefaultAsync(b => b.Id == fleetInfo.BuildId,
-            cancellationToken: cancellationToken);
-
-        if (buildInfo == null || buildInfo.Status is BuildStatus.Deleted)
-        {
-            throw new InvalidOperationException(
-                $"Fleet '{fleetId}' can't be build. Build '{fleetInfo.BuildId}' deleted");
-        }
-
-        return (fleetInfo, buildInfo);
-    }
-
-    private async Task UnlockFleet(FleetInfoEntity fleetInfo, CancellationToken cancellationToken)
-    {
-        if (fleetInfo.Status is FleetStatus.Pending)
-        {
-            fleetInfo.Status = FleetStatus.Failed;
-        }
-
-        _infoContext.Update(fleetInfo);
-
-        await _infoContext.SaveChangesAsync(cancellationToken);
     }
 }

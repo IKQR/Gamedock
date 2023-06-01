@@ -1,4 +1,5 @@
-﻿using GameDock.Server.Domain.Fleet;
+﻿using GameDock.Server.Domain.Enums;
+using GameDock.Server.Domain.Fleet;
 
 namespace GameDock.Server.Application.Services;
 
@@ -8,5 +9,7 @@ public interface IFleetInfoRepository
         IDictionary<string, string> variables, CancellationToken cancellationToken = default);
     
     Task<FleetInfo> GetById(Guid id, CancellationToken cancellationToken = default);
+    
+    Task<FleetInfo> SetStatusIfExistAsync(Guid id, FleetStatus status, CancellationToken cancellationToken = default);
 
 }

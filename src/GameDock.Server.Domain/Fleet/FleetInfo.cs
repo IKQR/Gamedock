@@ -3,4 +3,4 @@
 namespace GameDock.Server.Domain.Fleet;
 
 public record FleetInfo(Guid Id, Guid BuildId, string Runtime, int[] Ports, string LaunchParameters,
-    IDictionary<string, string> Variables,  FleetStatus Status, string ImageId, DateTime CreatedAt, DateTime UpdatedAt);
+    IDictionary<string, string> Variables,  FleetStatus Status, DateTime CreatedAt, DateTime UpdatedAt);

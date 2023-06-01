@@ -11,7 +11,6 @@ public class FleetInfoEntity
     public string LaunchParameters { get; init; }
     public IDictionary<string, string> Variables { get; set; }
     public FleetStatus Status { get; set; }
-    public string ImageId { get; set; }
     public DateTime CreatedAt { get; init; }
     public DateTime UpdatedAt { get; init; }
 }

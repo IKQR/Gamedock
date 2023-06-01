@@ -5,6 +5,7 @@ using GameDock.Server.Infrastructure.Database;
 using GameDock.Server.Infrastructure.Entities;
 using GameDock.Server.Infrastructure.Mappers;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace GameDock.Server.Infrastructure.Repositories;
 
@@ -43,5 +44,17 @@ public class FleetInfoRepository : IFleetInfoRepository
         var entity = await query.FirstOrDefaultAsync(cancellationToken: cancellationToken);
 
         return entity is null ? null : FleetInfoMapper.Map(entity);
+    }
+
+    public async Task<FleetInfo> SetStatusIfExistAsync(Guid id, FleetStatus status, CancellationToken cancellationToken = default)
+    {
+        var entity = await _context.FleetInfos.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+        if (entity is null) return null;
+
+        entity.Status = status;
+        _context.FleetInfos.Update(entity);
+        await _context.SaveChangesAsync(cancellationToken);
+        
+        return FleetInfoMapper.Map(entity);
     }
 }

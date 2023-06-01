@@ -47,7 +47,7 @@ public class FleetController : ControllerBase
             return BadRequest("Invalid fleet id format");
         }
 
-        await mediator.Send(new StartImageBuildRequest(guidId), cancellationToken);
+        await mediator.Send(new ScheduleImageBuildRequest(guidId), cancellationToken);
 
         return Ok();
     }

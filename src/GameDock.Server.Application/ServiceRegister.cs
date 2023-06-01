@@ -9,6 +9,7 @@ public static class ServiceRegister
 {
     public static IServiceCollection RegisterApplication(this IServiceCollection services)
         => services
+            .AddScoped<IBuildFleetService, BuildFleetService>()
             .AddQuartz(q => q.UseMicrosoftDependencyInjectionJobFactory())
             .AddQuartzHostedService(q => q.WaitForJobsToComplete = true)
             .AddSingleton(sp => sp.GetRequiredService<ISchedulerFactory>().GetScheduler().Result)

@@ -4,15 +4,15 @@ using Quartz;
 
 namespace GameDock.Server.Application.Handlers;
 
-public class BackgroundImageBuilderJob : IJob
+internal class BuildFleetJob : IJob
 {
     private readonly ILogger _logger;
-    private readonly IImageBuilder _imageBuilder;
+    private readonly IBuildFleetService _buildFleetService;
 
-    public BackgroundImageBuilderJob(ILogger<BackgroundImageBuilderJob> logger, IImageBuilder imageBuilder)
+    public BuildFleetJob(ILogger<BuildFleetJob> logger, IBuildFleetService buildBuildFleetService)
     {
         _logger = logger;
-        _imageBuilder = imageBuilder;
+        _buildFleetService = buildBuildFleetService;
     }
 
     public async Task Execute(IJobExecutionContext context)
@@ -24,7 +24,7 @@ public class BackgroundImageBuilderJob : IJob
 
         try
         {
-            await _imageBuilder.BuildImageFromFleet(fleetId, cancellationToken);
+            await _buildFleetService.Build(fleetId, cancellationToken);
 
             _logger.LogInformation("Fleet image ready. FleetId: '{Id}'", fleetId);
         }

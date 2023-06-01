@@ -22,7 +22,7 @@ public class DockerSessionRunner : ISessionRunner
     {
         _logger.LogInformation("Start session requested for fleet {FleetId}", fleet.Id);
 
-        var created = await CreateNew(fleet.ImageId, fleet.Ports, cancellationToken);
+        var created = await CreateNew(fleet.Id.ToString(), fleet.Ports, cancellationToken);
 
         await _docker.Containers.StartContainerAsync(created.ID, new ContainerStartParameters(), cancellationToken);
 

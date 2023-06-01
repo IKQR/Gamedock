@@ -4,10 +4,12 @@ using System.Threading.Tasks;
 using GameDock.Server.Application.Handlers.Sessions;
 using GameDock.Shared.Dto;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GameDock.Server.Controllers.Api;
 
+[Authorize]
 [ApiController]
 [Route("api/fleet/{fleetId:required}/session")]
 public class SessionController : ControllerBase
