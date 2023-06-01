@@ -19,7 +19,7 @@
             <main>
                 <div class="top-row px-4">
                     <NavLink href="/auth/logout" type="submit" class="nav-link btn btn-link text-dark">
-                        Logout (@context.User.Identity!.Name)
+                        @context.User.Identity!.Name&nbsp;@(context.User.IsInRole("Admin") ? "(Administrator)" : "")
                     </NavLink>
                 </div>
 

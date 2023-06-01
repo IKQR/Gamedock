@@ -1,5 +1,13 @@
-﻿<button @onclick="RefreshAsync" class="btn @(_buttonStyle)">
-    <i class="bi bi-arrow-repeat"></i>
+﻿<button @onclick="RefreshAsync" class="btn btn-link text-dark">
+
+    @if (_isLoading)
+    {
+        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+    }
+    else
+    {
+        <i class="bi bi-arrow-repeat"></i>
+    }
 </button>
 
 @code {
@@ -7,25 +15,22 @@
     [Parameter]
     public EventCallback OnRefresh { get; set; }
 
-    private string _buttonStyle = "btn-link text-dark";
+    private bool _isLoading = false;
 
     private async Task RefreshAsync()
     {
-        _buttonStyle = "btn-primary text-white";
+        _isLoading = true;
         StateHasChanged();
 
         try
         {
             await OnRefresh.InvokeAsync();
-            _buttonStyle = "btn-success text-white";
         }
-        catch (Exception)
+        finally
         {
-            _buttonStyle = "btn-danger text-white";
+            await Task.Delay(1000);
+            _isLoading = false;
         }
-        StateHasChanged();
-
-        await Task.Delay(2000);
-        _buttonStyle = "btn-link text-dark";
     }
+
 }
