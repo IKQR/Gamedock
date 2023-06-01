@@ -17,7 +17,7 @@ public class JwtAuthenticationStateProvider : AuthenticationStateProvider
 
     public override async Task<AuthenticationState> GetAuthenticationStateAsync()
     {
-        var jwtToken = await _localStorage.GetItemAsync<string>("authToken");
+        var jwtToken = await _localStorage.GetTokenAsync();
 
         if (string.IsNullOrEmpty(jwtToken))
         {
@@ -29,7 +29,7 @@ public class JwtAuthenticationStateProvider : AuthenticationStateProvider
 
         if (token.ValidTo < DateTime.UtcNow)
         {
-            await _localStorage.RemoveItemAsync("authToken");
+            await _localStorage.RemoveTokenAsync();
             return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
         }
 

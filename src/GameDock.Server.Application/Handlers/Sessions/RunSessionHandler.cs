@@ -24,7 +24,7 @@ public class RunSessionHandler : IRequestHandler<RunSessionRequest, RunSessionRe
     {
         _logger.LogInformation("Run session requested for fleet '{FleetId}'", request.FleetId);
 
-        var fleet = await _fleetInfoRepository.GetById(request.FleetId, cancellationToken);
+        var fleet = await _fleetInfoRepository.GetByIdAsync(request.FleetId, cancellationToken);
 
         if (fleet is null)
         {

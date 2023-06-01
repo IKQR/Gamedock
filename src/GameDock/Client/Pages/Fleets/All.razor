@@ -32,70 +32,7 @@
 
     private async Task RefreshAsync()
     {
-        // var fleets = await Http.GetFromJsonAsync<FleetInfoDto[]>("/api/fleet/info");
-        var fleets = new[]
-        {
-            new()
-            {
-                Id = Guid.NewGuid(),
-                BuildId = Guid.NewGuid(),
-                Runtime = "dotnet",
-                Ports = new int[] { 8080, 8081 },
-                LaunchParameters = "--env=prod",
-                Status = "Running",
-                ImageId = "123456",
-                CreatedAt = DateTime.Now.AddDays(-1),
-                UpdatedAt = DateTime.Now.AddDays(-1)
-            },
-            new FleetInfoDto
-            {
-                Id = Guid.NewGuid(),
-                BuildId = Guid.NewGuid(),
-                Runtime = "node",
-                Ports = new int[] { 3000 },
-                LaunchParameters = "--env=dev",
-                Status = "Stopped",
-                ImageId = "987654",
-                CreatedAt = DateTime.Now.AddDays(-2),
-                UpdatedAt = DateTime.Now.AddDays(-2)
-            },
-            new FleetInfoDto
-            {
-                Id = Guid.NewGuid(),
-                BuildId = Guid.NewGuid(),
-                Runtime = "java",
-                Ports = new int[] { 8080, 8443 },
-                LaunchParameters = "-Xmx512m",
-                Status = "Running",
-                ImageId = "654321",
-                CreatedAt = DateTime.Now.AddDays(-3),
-                UpdatedAt = DateTime.Now.AddDays(-3)
-            },
-            new FleetInfoDto
-            {
-                Id = Guid.NewGuid(),
-                BuildId = Guid.NewGuid(),
-                Runtime = "python",
-                Ports = new int[] { 5000 },
-                LaunchParameters = "",
-                Status = "Running",
-                ImageId = "789012",
-                CreatedAt = DateTime.Now.AddDays(-4),
-                UpdatedAt = DateTime.Now.AddDays(-4)
-            },
-            new FleetInfoDto
-            {
-                Id = Guid.NewGuid(),
-                BuildId = Guid.NewGuid(),
-                Runtime = "go",
-                Ports = new int[] { 8080, 8081, 8082 },
-                LaunchParameters = "-mode=prod",
-                Status = "Running",
-                ImageId = "345678",
-                CreatedAt = DateTime.Now.AddDays(-5),
-                UpdatedAt = DateTime.Now.AddDays(-5)
-            }
-        };
+        var fleets = await Http.GetFromJsonAsync<FleetInfoDto[]>("/api/fleet/info");
 
         _fleets = fleets.OrderByDescending(x => x.UpdatedAt).ToArray();
     }

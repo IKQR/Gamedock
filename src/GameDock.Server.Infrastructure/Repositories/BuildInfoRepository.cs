@@ -14,7 +14,8 @@ public class BuildInfoRepository : IBuildInfoRepository
 
     public BuildInfoRepository(InfoDbContext context) => _context = context;
 
-    public async Task<BuildInfo> AddAsync(string name, string version, string runtimePath, CancellationToken cancellationToken)
+    public async Task<BuildInfo> AddAsync(string name, string version, string runtimePath,
+        CancellationToken cancellationToken)
     {
         var entity = new BuildInfoEntity
         {
@@ -32,7 +33,9 @@ public class BuildInfoRepository : IBuildInfoRepository
 
     public async Task<IList<BuildInfo>> GetAllAsync(CancellationToken cancellationToken)
     {
-        var entities = await _context.BuildInfos.ToListAsync(cancellationToken: cancellationToken);
+        var entities = await _context.BuildInfos
+            .Where(x => x.Status != BuildStatus.Deleted)
+            .ToListAsync(cancellationToken: cancellationToken);
 
         return entities.Select(BuildInfoMapper.Map).ToList();
     }
@@ -59,17 +62,26 @@ public class BuildInfoRepository : IBuildInfoRepository
         return result.Select(BuildInfoMapper.Map).ToList();
     }
 
-    public async Task SetAsDeleted(Guid id, CancellationToken cancellationToken)
+    public async Task<bool> TrySetDeleted(Guid id, CancellationToken cancellationToken)
     {
-        var entity = await _context.BuildInfos.FindAsync(new object[] { id }, cancellationToken);
-
-        if (entity is null)
+        try
         {
-            return;
+            var entity = await _context.BuildInfos.FindAsync(new object[] { id }, cancellationToken);
+
+            if (entity is null)
+            {
+                return false;
+            }
+
+            entity.Status = BuildStatus.Deleted;
+
+            await _context.SaveChangesAsync(cancellationToken);
+
+            return true;
         }
-
-        entity.Status = BuildStatus.Deleted;
-
-        await _context.SaveChangesAsync(cancellationToken);
+        catch (Exception)
+        {
+            return false;
+        }
     }
 }

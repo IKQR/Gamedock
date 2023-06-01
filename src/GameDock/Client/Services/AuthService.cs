@@ -37,9 +37,9 @@ public class AuthService
             };
         }
 
-        await _localStorage.SetItemAsync("authToken", content);
+        await _localStorage.SetTokenAsync(content);
 
-        return new AuthResult()
+        return new AuthResult
         {
             Succeeded = true,
             Token = content,

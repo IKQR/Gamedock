@@ -74,11 +74,11 @@ public class BuildFleetService : IBuildFleetService
             return null;
         }
 
-        var buildFile = await _buildFiles.GetStream(buildInfo.Id.ToString(), cancellationToken);
+        var buildFile = await _buildFiles.GetStreamReadAsync(buildInfo.Id.ToString(), cancellationToken);
 
         if (buildFile is null)
         {
-            await _buildInfos.SetAsDeleted(buildInfo.Id, cancellationToken);
+            await _buildInfos.TrySetDeleted(buildInfo.Id, cancellationToken);
             await _fleetInfos.SetStatusIfExistAsync(fleetId, FleetStatus.Dead, cancellationToken);
             return null;
         }

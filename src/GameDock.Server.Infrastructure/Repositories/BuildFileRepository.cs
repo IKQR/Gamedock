@@ -12,7 +12,7 @@ public class BuildFileRepository : IBuildFileRepository
         _directory = new DirectoryInfo(options.Value.Path);
     }
 
-    public ValueTask<Stream> GetStream(string key, CancellationToken cancellationToken = default)
+    public ValueTask<Stream> GetStreamReadAsync(string key, CancellationToken cancellationToken = default)
     {
         var fileName = FileName(key);
         var file = _directory.GetFiles().FirstOrDefault(x => x.Name == fileName);
@@ -33,6 +33,27 @@ public class BuildFileRepository : IBuildFileRepository
 
         await using var fileStream = fileInfo.Create();
         await content.CopyToAsync(fileStream, cancellationToken);
+    }
+
+    public async ValueTask<bool> TryDeleteAsync(string key, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var fileName = FileName(key);
+
+            if (!File.Exists(fileName))
+            {
+                return false;
+            }
+
+            File.Delete(fileName);
+
+            return true;
+        }
+        catch(Exception)
+        {
+            return false;
+        }
     }
 
     private static string FileName(string key) => $"{key}.tar";

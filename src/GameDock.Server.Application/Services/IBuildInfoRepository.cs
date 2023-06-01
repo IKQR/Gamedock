@@ -13,5 +13,5 @@ public interface IBuildInfoRepository
     Task<IList<BuildInfo>> GetByNameAsync(string names, string versions = null,
         CancellationToken cancellationToken = default);
 
-    Task SetAsDeleted(Guid id, CancellationToken cancellationToken = default);
+    Task<bool> TrySetDeleted(Guid id, CancellationToken cancellationToken = default);
 }

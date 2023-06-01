@@ -1,4 +1,7 @@
-﻿@inject IJSRuntime Js
+﻿@using Blazored.LocalStorage
+@using GameDock.Client.Services
+@inject IJSRuntime Js
+@inject ILocalStorageService LocalStorage
 
 <button class="btn btn-primary" @onclick="DownloadASync">
     <i class="bi bi-download"></i>&nbsp;Download
@@ -11,7 +14,7 @@
 
     private async Task DownloadASync()
     {
-        await Js.InvokeVoidAsync("downloadFile", $"/api/build/{BuildId}/download");
+        var token = await LocalStorage.GetTokenAsync();
+        await Js.InvokeVoidAsync("downloadFile", $"/api/build/{BuildId}/download", token);
     }
-
 }

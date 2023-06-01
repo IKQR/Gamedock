@@ -5,7 +5,6 @@ using GameDock.Server.Infrastructure.Database;
 using GameDock.Server.Infrastructure.Entities;
 using GameDock.Server.Infrastructure.Mappers;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace GameDock.Server.Infrastructure.Repositories;
 
@@ -19,7 +18,7 @@ public class FleetInfoRepository : IFleetInfoRepository
     }
 
     public async Task<FleetInfo> AddAsync(Guid buildId, string runtime, int[] ports, string launchParameters,
-        IDictionary<string, string> variables, CancellationToken cancellationToken = default)
+        IDictionary<string, string> variables, CancellationToken cancellationToken)
     {
         var entity = new FleetInfoEntity
         {
@@ -37,7 +36,7 @@ public class FleetInfoRepository : IFleetInfoRepository
         return FleetInfoMapper.Map(entry.Entity);
     }
 
-    public async Task<FleetInfo> GetById(Guid id, CancellationToken cancellationToken = default)
+    public async Task<FleetInfo> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
         var query = _context.FleetInfos.Where(x => x.Id == id);
 
@@ -46,7 +45,7 @@ public class FleetInfoRepository : IFleetInfoRepository
         return entity is null ? null : FleetInfoMapper.Map(entity);
     }
 
-    public async Task<FleetInfo> SetStatusIfExistAsync(Guid id, FleetStatus status, CancellationToken cancellationToken = default)
+    public async Task<FleetInfo> SetStatusIfExistAsync(Guid id, FleetStatus status, CancellationToken cancellationToken)
     {
         var entity = await _context.FleetInfos.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         if (entity is null) return null;
@@ -54,7 +53,14 @@ public class FleetInfoRepository : IFleetInfoRepository
         entity.Status = status;
         _context.FleetInfos.Update(entity);
         await _context.SaveChangesAsync(cancellationToken);
-        
+
         return FleetInfoMapper.Map(entity);
+    }
+
+    public async Task<IList<FleetInfo>> GetAllAsync(CancellationToken cancellationToken)
+    {
+        var entities = await _context.FleetInfos.ToListAsync(cancellationToken: cancellationToken);
+
+        return entities.Select(FleetInfoMapper.Map).ToList();
     }
 }

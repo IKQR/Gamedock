@@ -1,5 +1,4 @@
-﻿using GameDock.Server.Application.Services;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Quartz;
 
 namespace GameDock.Server.Application.Handlers;
