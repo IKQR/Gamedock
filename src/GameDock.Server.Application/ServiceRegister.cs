@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using GameDock.Server.Application.Handlers;
+using GameDock.Server.Application.Handlers.Fleets;
 using Microsoft.Extensions.DependencyInjection;
 using Quartz;
 

@@ -2,14 +2,14 @@
 using Microsoft.Extensions.Logging;
 using Quartz;
 
-namespace GameDock.Server.Application.Handlers;
+namespace GameDock.Server.Application.Handlers.Fleets;
 
-public class ScheduleImageBuildHandler : IRequestHandler<ScheduleImageBuildRequest>
+public class ScheduleFleetBuildHandler : IRequestHandler<ScheduleImageBuildRequest>
 {
     private readonly ILogger _logger;
     private readonly IScheduler _scheduler;
 
-    public ScheduleImageBuildHandler(ILogger<ScheduleImageBuildHandler> logger, IScheduler scheduler)
+    public ScheduleFleetBuildHandler(ILogger<ScheduleFleetBuildHandler> logger, IScheduler scheduler)
     {
         _logger = logger;
         _scheduler = scheduler;

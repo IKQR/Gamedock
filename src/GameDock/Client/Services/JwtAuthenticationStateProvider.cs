@@ -6,6 +6,7 @@ using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Authorization;
 
 namespace GameDock.Client.Services;
+
 public class JwtAuthenticationStateProvider : AuthenticationStateProvider
 {
     private readonly ILocalStorageService _localStorage;

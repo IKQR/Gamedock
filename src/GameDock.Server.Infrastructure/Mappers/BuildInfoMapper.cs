@@ -1,4 +1,4 @@
-﻿using GameDock.Server.Domain.Build;
+﻿using GameDock.Server.Domain;
 using GameDock.Server.Infrastructure.Entities;
 
 namespace GameDock.Server.Infrastructure.Mappers;
@@ -12,6 +12,5 @@ public static class BuildInfoMapper
             Version: entity.Version,
             RuntimePath: entity.RuntimePath,
             Status: entity.Status,
-            CreatedAt: entity.CreatedAt,
-            UpdatedAt: entity.UpdatedAt);
+            CreatedAt: entity.CreatedAt);
 }

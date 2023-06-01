@@ -1,6 +1,6 @@
 ﻿using GameDock.Server.Application.Services;
+using GameDock.Server.Domain;
 using GameDock.Server.Domain.Enums;
-using GameDock.Server.Domain.Session;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
@@ -33,7 +33,7 @@ public class RunSessionHandler : IRequestHandler<RunSessionRequest, RunSessionRe
 
         if (fleet.Status is not FleetStatus.Ready)
         {
-            return new RunSessionResponse(false, Error: "Fleet not ready. try to rebuild.");
+            return new RunSessionResponse(false, Error: "Fleet not ready");
         }
 
         var session = await _sessionRunner.RunSessionOnFleetAsync(fleet, cancellationToken);

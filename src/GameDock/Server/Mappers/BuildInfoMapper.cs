@@ -1,4 +1,4 @@
-﻿using GameDock.Server.Domain.Build;
+﻿using GameDock.Server.Domain;
 using GameDock.Shared.Dto;
 
 namespace GameDock.Server.Mappers;
@@ -12,6 +12,5 @@ public static class BuildInfoMapper
         Version = buildInfo.Version,
         Status = buildInfo.Status.ToString(),
         CreatedAt = buildInfo.CreatedAt,
-        UpdatedAt = buildInfo.UpdatedAt,
     };
 }

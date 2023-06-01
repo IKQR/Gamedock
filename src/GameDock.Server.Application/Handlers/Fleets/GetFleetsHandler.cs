@@ -1,5 +1,5 @@
 ﻿using GameDock.Server.Application.Services;
-using GameDock.Server.Domain.Fleet;
+using GameDock.Server.Domain;
 using MediatR;
 using Microsoft.Extensions.Logging;
 

@@ -1,5 +1,5 @@
-﻿using GameDock.Server.Domain.Enums;
-using GameDock.Server.Domain.Fleet;
+﻿using GameDock.Server.Domain;
+using GameDock.Server.Domain.Enums;
 
 namespace GameDock.Server.Application.Services;
 

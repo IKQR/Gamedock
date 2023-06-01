@@ -1,6 +1,6 @@
 ﻿using GameDock.Server.Application.Services;
+using GameDock.Server.Domain;
 using GameDock.Server.Domain.Enums;
-using GameDock.Server.Domain.Fleet;
 using GameDock.Server.Infrastructure.Database;
 using GameDock.Server.Infrastructure.Entities;
 using GameDock.Server.Infrastructure.Mappers;

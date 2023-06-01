@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using Quartz;
 
-namespace GameDock.Server.Application.Handlers;
+namespace GameDock.Server.Application.Handlers.Fleets;
 
 internal class BuildFleetJob : IJob
 {

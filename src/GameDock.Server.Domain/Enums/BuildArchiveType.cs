@@ -3,5 +3,4 @@
 public enum BuildArchiveType
 {
     Tar,
-    [Obsolete] Zip,
 }

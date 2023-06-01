@@ -1,10 +1,9 @@
 ﻿using GameDock.Server.Application.Services;
-using GameDock.Server.Domain.Build;
+using GameDock.Server.Domain;
 using GameDock.Server.Domain.Enums;
-using GameDock.Server.Domain.Fleet;
 using Microsoft.Extensions.Logging;
 
-namespace GameDock.Server.Application.Handlers;
+namespace GameDock.Server.Application.Handlers.Fleets;
 
 public interface IBuildFleetService
 {

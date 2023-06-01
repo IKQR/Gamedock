@@ -1,4 +1,4 @@
-﻿using GameDock.Server.Domain.Fleet;
+﻿using GameDock.Server.Domain;
 using GameDock.Shared.Dto;
 
 namespace GameDock.Server.Mappers;

@@ -1,6 +1,6 @@
 ﻿using GameDock.Server.Application.Services;
+using GameDock.Server.Domain;
 using GameDock.Server.Domain.Enums;
-using GameDock.Server.Domain.Fleet;
 using MediatR;
 using Microsoft.Extensions.Logging;
 

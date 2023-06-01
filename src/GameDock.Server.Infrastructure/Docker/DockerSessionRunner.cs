@@ -1,8 +1,7 @@
 ﻿using Docker.DotNet;
 using Docker.DotNet.Models;
 using GameDock.Server.Application.Services;
-using GameDock.Server.Domain.Fleet;
-using GameDock.Server.Domain.Session;
+using GameDock.Server.Domain;
 using Microsoft.Extensions.Logging;
 
 namespace GameDock.Server.Infrastructure.Docker;
